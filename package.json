@@ -1,0 +1,19 @@
+{
+    "name": "inspector-agent",
+    "description": "Webkit inspector port for nodejs",
+    "version": "0.1.0",
+    "private": true,
+    "author": "Camilo Aguilar",
+    "repository": "git://github.com/c4milo/node-inspector",
+    "engines": {
+        "node": "0.6.x"
+    },
+    "devDependencies": {
+        "mocha": "0.14.1",
+        "should": "0.6.0"
+    },
+    "dependencies": {
+        "ws": "0.4.11"
+    }, 
+    "main": "agent"
+}
