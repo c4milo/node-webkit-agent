@@ -1,0 +1,24 @@
+Workflow #1
+
+1. cp -r /Users/camilo/Development/chromium/src/third_party/WebKit/Source/WebCore/inspector/front-end/* ~/Dropbox/Development/cloudescape/node-inspector-agent/public/
+
+2. rm -rf ~/Dropbox/Development/cloudescape/node-inspector-agent/public/*.qrc ~/Dropbox/Development/cloudescape/node-inspector-agent/public/*.re2js
+
+3. search for <script type="text/javascript" src="InspectorBackendStub.js"></script> in ~/Dropbox/Development/cloudescape/node-inspector-agent/public/inspector.html
+   and delete the line.
+
+4. ln -s ~/Dropbox/Development/cloudescape/node-inspector-agent/public/inspector.html ~/Dropbox/Development/cloudescape/node-inspector-agent/public/index.html
+
+5. Add 
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="node/Overrides.js"></script> 
+   At the bottom of the head tag in inspector.html+
+
+
+Workflow #2
+1. /Applications/Google\ Chrome\ Canary.app/Contents/MacOS/Google\ Chrome\ Canary --remote-debugging-port=9222
+
+2. Start nodejs agent on port 8080
+
+3. Go to http://localhost:9222/devtools/devtools.html?host=localhost:8080&page=0
+
