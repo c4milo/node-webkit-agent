@@ -25,8 +25,10 @@ wss.on('connection', function(socket) {
     		return;
     	}
 
-    	domain[method](params, function(response) {
-    		socket.send(JSON.stringify({ id: id, result: response }));
-    	});
+    	domain[method](params, function(result) {
+    		socket.send(JSON.stringify({ id: id, result: result }));
+    	}, function(event) {
+            socket.send(JSON.stringify(event));
+        });
     });
 });

@@ -13,10 +13,8 @@
         "should": "0.6.0"
     },
     "dependencies": {
+        "v8-profiler": "git+ssh://git@github.com:c4milo/v8-profiler.git#master",
         "ws": "0.4.11"
     },
-    "scripts": {
-        "install": "node-waf distclean configure build"
-    }, 
     "main": "agent"
 }
