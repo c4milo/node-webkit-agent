@@ -1,12 +1,21 @@
 {
-    "name": "webkit-inspector-agent",
-    "description": "Webkit inspector port for nodejs",
-    "version": "0.1.0",
-    "private": true,
+    "name": "node-webkit-agent",
+    "description": "Webkit devtool agent that leverages remote debugging and profiling of nodejs applications.",
+    "keywords": [
+        "devtools",
+        "agent",
+        "webkit",
+        "debugger",
+        "profiler",
+        "remote",
+        "v8"
+    ],
+    "homepage": "http://github.com/c4milo/node-webkit-agent",
+    "version": "0.0.1",
     "author": "Camilo Aguilar",
-    "repository": "git://github.com/c4milo/node-inspector",
+    "repository": "git://github.com/c4milo/node-webkit-agent",
     "engines": {
-        "node": "0.6.x"
+        "node": "0.6 || 0.7 || 0.8"
     },
     "devDependencies": {
         "mocha": "0.14.1",
