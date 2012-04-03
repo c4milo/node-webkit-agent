@@ -1,10 +1,12 @@
 
 var WebSocketServer = require('ws').Server;
 var agents = require('./lib');
-var wss; 
+var wss;
+
+var port = process.env.DEBUG_PORT || 1337;
 
 function start() {
-    wss = new WebSocketServer({port: 8080});
+    wss = new WebSocketServer({port: port});
 
     wss.on('connection', function(socket) {
         socket.on('message', function(message) {
