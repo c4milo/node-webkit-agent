@@ -8,6 +8,8 @@ var port = process.env.DEBUG_PORT || 1337;
 function start() {
     wss = new WebSocketServer({port: port});
 
+    console.log('webkit-agent started on port %s', port);
+
     wss.on('connection', function(socket) {
         socket.on('message', function(message) {
            //console.log(message);
@@ -42,7 +44,8 @@ function stop() {
     if (wss) {
         wss.close();
         wss = null;
-    } 
+        console.log('webkit-agent stopped');
+    }
 }
 
 if (!module.parent) {
