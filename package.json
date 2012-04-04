@@ -1,6 +1,6 @@
 {
     "name": "webkit-devtools-agent",
-    "description": "Webkit devtool agent that leverages remote debugging and profiling of nodejs applications using built-in webkit devtools front-end",
+    "description": "Webkit devtools agent that leverages remote debugging and profiling of nodejs applications using built-in webkit devtools front-end",
     "keywords": [
         "devtools",
         "agent",

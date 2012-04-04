@@ -52,7 +52,7 @@ if (!module.parent) {
     start();
 } else {
     process.on('SIGUSR1', function() {
-        if (ws) {
+        if (wss) {
             stop();
         } else {
             start();
