@@ -48,7 +48,7 @@ function stop() {
 if (!module.parent) {
     start();
 } else {
-    process.on('SIGUSR2', function() {
+    process.on('SIGUSR1', function() {
         if (ws) {
             stop();
         } else {
