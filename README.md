@@ -35,4 +35,6 @@ Then proceed to require the module from your nodejs application and that should 
 
 You can also change the agent port by setting up the DEBUG_PORT environment variable.
 
+For more documentation about how to use and interpret devtools, please go to the [Devtools official documentation](http://code.google.com/chrome/devtools/docs/overview.html)
+
 Happy Debugging!
