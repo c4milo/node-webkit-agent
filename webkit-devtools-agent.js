@@ -1,4 +1,3 @@
-
 var WebSocketServer = require('ws').Server;
 var agents = require('./lib');
 var wss;
@@ -12,20 +11,20 @@ function start() {
 
     wss.on('connection', function(socket) {
         socket.on('message', function(message) {
-           //console.log(message);
-           try {
-              message = JSON.parse(message);
-           } catch(e) {
-              console.log(e);
-              return;
-           }
-           
-           var id = message.id;
-           var command = message.method.split('.');
-           var domain = agents[command[0]];
-           var method = command[1];
-           var params = message.params;
-        
+            //console.log(message);
+            try {
+                message = JSON.parse(message);
+            } catch(e) {
+                console.log(e);
+                return;
+            }
+
+            var id = message.id;
+            var command = message.method.split('.');
+            var domain = agents[command[0]];
+            var method = command[1];
+            var params = message.params;
+
             if (!domain || !domain[method]) {
                 console.error('%s is not implemented', message.method);
                 return;
@@ -51,7 +50,7 @@ function stop() {
 if (!module.parent) {
     start();
 } else {
-    process.on('SIGUSR1', function() {
+    process.on('SIGUSR2', function() {
         if (wss) {
             stop();
         } else {
@@ -61,6 +60,6 @@ if (!module.parent) {
 }
 
 process.on('uncaughtException', function (err) {
-  console.error('Node inspector agent uncaughtException: ');
-  console.error(err.stack);
+    console.error('Node inspector agent uncaughtException: ');
+    console.error(err.stack);
 });
