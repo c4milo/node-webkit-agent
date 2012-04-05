@@ -17,7 +17,7 @@ that comes with any webkit-based browser such as Chrome and Safari.
 ##Installation
 `npm install webkit-devtools-agent`
 
-Then proceed to require the module from your nodejs application and that's it.
+Then proceed to require the module from your nodejs application and that should do it.
 
 ##Usage:
 
