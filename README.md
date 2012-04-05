@@ -27,8 +27,8 @@ Then proceed to require the module from your nodejs application and that should 
 2. Start a *client* Chrome instance using a separate user profile:
 `Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --user-data-dir=<some directory>`
 
-3. Activate the agent by sending a SIGUSR1 signal to the process id of your application. To de-activate send the signal once again.
-`kill -SIGUSR1 <the process id>`
+3. Activate the agent by sending a SIGUSR2 signal to the process id of your application. To de-activate send the signal once again.
+`kill -SIGUSR2 <the process id>`
 
 4. In your *client* instance, open up devtools using the following URL: 
 `http://localhost:9222/devtools/devtools.html?host=localhost:1337&page=0`
