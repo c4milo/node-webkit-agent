@@ -11,7 +11,7 @@ that comes with any webkit-based browser such as Chrome and Safari.
 
 * Remote debugging
 * Remote heap and CPU profiling
-* Remote console to inject code in your node applications while debugging.
+* Remote console
 * Network monitoring
 
 ##Installation
