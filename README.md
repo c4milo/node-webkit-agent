@@ -6,7 +6,7 @@ and networking will be added soon.
 
 ##Features
 This module allows you to debug and profile remotely your nodejs applications
-leveraging the following features by re-using the [built-in devtools frontend](http://code.google.com/chrome/devtools/docs/overview.html)
+leveraging the following features by re-using the [built-in devtools front-end](http://code.google.com/chrome/devtools/docs/overview.html)
 that comes with any webkit-based browser such as Chrome and Safari.
 
 * Remote debugging
@@ -17,9 +17,20 @@ that comes with any webkit-based browser such as Chrome and Safari.
 ##Installation
 `npm install webkit-devtools-agent`
 
-Then proceed to require the module from your nodejs application and that should do it.
+##Example
+```javascript
+var agent = require('webkit-devtools-agent');
+var http = require('http');
+http.createServer(function (req, res) {
+  res.writeHead(200, {'Content-Type': 'text/plain'});
+  res.end('Hello World\n');
+}).listen(8080, '127.0.0.1');
+console.log('[%s] Server running at http://127.0.0.1:8080/', process.pid);
+```
+##Debugging your application
 
-##Usage:
+Since we want to use [Chrome remote debugging](http://code.google.com/chrome/devtools/docs/remote-debugging.html)
+capabilities to serve the devtools front-end from it, we'll need to follow the next steps: 
 
 1. Start a *host* Chrome instance with remote-debugging-port command line switch, in OSX it will be something like this:
 `/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222`
@@ -27,10 +38,10 @@ Then proceed to require the module from your nodejs application and that should 
 2. Start a *client* Chrome instance using a separate user profile:
 `/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --user-data-dir=<some directory>`
 
-3. Activate the agent by sending a SIGUSR2 signal to the process id of your application. To de-activate send the signal once again.
+3. Activate the agent, in your nodejs application, by sending a SIGUSR2 signal to its process id. To de-activate send the signal once again.
 `kill -SIGUSR2 <the process id of your nodejs app>`
 
-4. In your *client* instance, open up devtools using the following URL: 
+4. In your *client* Chrome instance, open up devtools using the following URL: 
 `http://localhost:9222/devtools/devtools.html?host=localhost:1337&page=0`
 
 You can also change the agent port by setting up the DEBUG_PORT environment variable.
