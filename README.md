@@ -48,4 +48,12 @@ You can also change the agent port by setting up the DEBUG_PORT environment vari
 
 For more documentation about how to use and interpret devtools, please go to the [Devtools official documentation](http://code.google.com/chrome/devtools/docs/overview.html)
 
+##Screenshots
+### CPU profiling
+![Screenshot](http://i.imgur.com/XLFG5.png)
+
+### Heap Profiling
+![Screenshot](http://i.imgur.com/2jkme.png)
+
+
 Happy Debugging!
