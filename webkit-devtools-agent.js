@@ -3,15 +3,15 @@ var agents = require('./lib');
 var wss;
 
 var port = process.env.DEBUG_PORT || 1337;
+var host = process.env.DEBUG_HOST || '127.0.0.1';
 
 function start() {
-    wss = new WebSocketServer({port: port});
+    wss = new WebSocketServer({port: port, host: host});
 
-    console.log('webkit-agent started on port %s', port);
+    console.log('webkit-devtools-agent started on %s:%s', host, port);
 
     wss.on('connection', function(socket) {
         socket.on('message', function(message) {
-            //console.log(message);
             try {
                 message = JSON.parse(message);
             } catch(e) {
@@ -42,8 +42,7 @@ function start() {
 function stop() {
     if (wss) {
         wss.close();
-        wss = null;
-        console.log('webkit-agent stopped');
+        console.log('webkit-devtools-agent stopped');
     }
 }
 
@@ -60,6 +59,6 @@ if (!module.parent) {
 }
 
 process.on('uncaughtException', function (err) {
-    console.error('Node inspector agent uncaughtException: ');
+    console.error('webkit-devtools-agent: uncaughtException: ');
     console.error(err.stack);
 });
