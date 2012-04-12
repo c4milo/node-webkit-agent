@@ -23,7 +23,7 @@
     },
     "dependencies": {
         "v8-profiler": "git://github.com/c4milo/v8-profiler.git#master",
-        "ws": "0.4.11"
+        "ws": "0.4.12"
     },
     "main": "webkit-devtools-agent"
 }
