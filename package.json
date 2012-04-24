@@ -1,6 +1,6 @@
 {
     "name": "webkit-devtools-agent",
-    "description": "Webkit devtools agent that leverages remote debugging and profiling of nodejs applications using built-in webkit devtools front-end",
+    "description": "Webkit devtools agent that leverages remote debugging and profiling of nodejs applications using the built-in webkit inspector.",
     "keywords": [
         "devtools",
         "agent",
@@ -11,7 +11,7 @@
         "v8"
     ],
     "homepage": "http://github.com/c4milo/node-webkit-agent",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "author": "Camilo Aguilar",
     "repository": "git://github.com/c4milo/node-webkit-agent",
     "engines": {
