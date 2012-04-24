@@ -1,5 +1,5 @@
 # Node Webkit Agent
-This module is an implementation of 
+This module is an implementation of
 [Chrome developer tools protocol](http://code.google.com/chrome/devtools/docs/protocol/1.0/index.html).
 It is still pretty much a work in progress and only the heap and CPU profilers are working right now. Debugger, console
 and networking will be added soon.
@@ -27,24 +27,15 @@ http.createServer(function (req, res) {
 }).listen(8080, '127.0.0.1');
 console.log('[%s] Server running at http://127.0.0.1:8080/', process.pid);
 ```
-##Debugging your application
+##Connecting to the agent
 
-Since we want to use [Chrome remote debugging](http://code.google.com/chrome/devtools/docs/remote-debugging.html)
-capabilities to serve the devtools front-end from it, we'll need to follow the next steps: 
-
-1. Start a *host* Chrome instance with remote-debugging-port command line switch, in OSX it will be something like this:
-`/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9222`
-
-2. Start a *client* Chrome instance using a separate user profile:
-`/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --user-data-dir=<some directory>`
-
-3. Activate the agent, in your nodejs application, by sending a SIGUSR2 signal to its process id. To de-activate send the signal once again.
+1. Activate the agent, in your nodejs application, by sending a SIGUSR2 signal to its process id. To de-activate, send the signal once again.
 `kill -SIGUSR2 <the process id of your nodejs app>`
 
-4. In your *client* Chrome instance, open up devtools using the following URL: 
-`http://localhost:9222/devtools/devtools.html?host=localhost:1337&page=0`
+2. Using your browser, go to http://trac.webkit.org/export/head/trunk/Source/WebCore/inspector/front-end/inspector.html?ws=localhost:1337. It's important to make sure
+your browser supports websockets, otherwise the front-end won't be able to connect to the node agent whatsoever.
 
-You can also change the agent port by setting up the DEBUG_PORT environment variable.
+You can also change the agent port and host where it listen to by setting up the DEBUG_PORT and DEBUG_HOST environment variables.
 
 For more documentation about how to use and interpret devtools, please go to the [Devtools official documentation](http://code.google.com/chrome/devtools/docs/overview.html)
 
