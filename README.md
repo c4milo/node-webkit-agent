@@ -30,6 +30,7 @@ console.log('[%s] Server running at http://127.0.0.1:8080/', process.pid);
 ##Connecting to the agent
 
 1. Activate the agent, in your nodejs application, by sending a SIGUSR2 signal to its process id. To de-activate, send the signal once again.
+Example: 
 `kill -SIGUSR2 <the process id of your nodejs app>`
 
 2. Using your browser, go to http://trac.webkit.org/export/head/trunk/Source/WebCore/inspector/front-end/inspector.html?ws=localhost:1337. It's important to make sure
