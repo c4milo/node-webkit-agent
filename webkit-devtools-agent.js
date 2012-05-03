@@ -38,7 +38,7 @@ function start() {
             var params = message.params;
 
             if (!domain || !domain[method]) {
-                console.error('%s is not implemented', message.method);
+                console.warn('%s is not implemented', message.method);
                 return;
             }
 
