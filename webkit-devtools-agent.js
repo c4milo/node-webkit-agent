@@ -11,6 +11,16 @@ function start() {
     console.log('webkit-devtools-agent started on %s:%s', host, port);
 
     wss.on('connection', function(socket) {
+        function sendEvent(event) {
+            socket.send(JSON.stringify(event));
+        }
+
+        for (var agent in agents) {
+            if (typeof agents[agent] == 'function') {
+                agents[agent] = new agents[agent](sendEvent);
+            }
+        }
+
         socket.on('message', function(message) {
             try {
                 message = JSON.parse(message);
@@ -34,8 +44,6 @@ function start() {
 
             domain[method](params, function(result) {
                 socket.send(JSON.stringify({ id: id, result: result }));
-            }, function(event) {
-                socket.send(JSON.stringify(event));
             });
         });
     });
