@@ -19,6 +19,8 @@ function start() {
                 return;
             }
 
+            //console.log(message);
+
             var id = message.id;
             var command = message.method.split('.');
             var domain = agents[command[0]];
@@ -62,3 +64,4 @@ process.on('uncaughtException', function (err) {
     console.error('webkit-devtools-agent: uncaughtException: ');
     console.error(err.stack);
 });
+
