@@ -1,6 +1,0 @@
-1. /Applications/Google\ Chrome\ Canary.app/Contents/MacOS/Google\ Chrome\ Canary --remote-debugging-port=9222
-
-2. Start nodejs agent
-
-3. Go to http://localhost:9222/devtools/devtools.html?host=localhost:8080&page=0 using another chrome browser.
-
