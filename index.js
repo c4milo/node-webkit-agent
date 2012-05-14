@@ -3,11 +3,13 @@ var fork = require('child_process').fork;
 
 var child = fork('./webkit-devtools-agent.js', process.argv);
 
+initializeAgents();
+
 child.on('message', function(message) {
     var data = message.data;
     switch(message.event) {
         case 'connection':
-            initializeAgents();
+            //initializeAgents();
             break;
         case 'method':
             var id = data.id;
@@ -22,13 +24,17 @@ child.on('message', function(message) {
             }
 
             domain[method](params, function(result) {
-                child.send({
+                var sent = child.send({
                     event: 'result',
                     data: {
                         id: id,
                         result: result
                     }
                 });
+                if (!sent) {
+                    console.log('PUTA !!!');
+                    console.log(result);
+                }
             });
             break;
     }
@@ -67,4 +73,7 @@ child.on('exit', function(code, signal) {
     //TODO: re-spawn it
 });
 
+process.on('exit', function() {
+    child.kill('SIGTERM');
+});
 

@@ -1,68 +1,76 @@
 var Debugger = require('./lib/debugger');
 var WebSocketServer = require('ws').Server;
-var wss;
 
-var port = process.env.DEBUG_PORT || 9999;
-var host = process.env.DEBUG_HOST || '127.0.0.1';
+var DevToolsAgent = function() {
+    this.wss = null;
+    this.port = process.env.DEBUG_PORT || 9999;
+    this.host = process.env.DEBUG_HOST || '127.0.0.1';
+};
 
-function start() {
-    wss = new WebSocketServer({
-        port: port,
-        host: host
+(function() {
+    var self = this;
+    process.on('SIGUSR2', function() {
+        if (self.wss) {
+            self.stop();
+        } else {
+            self.start();
+        }
     });
 
-    console.log('webkit-devtools-agent started on %s:%s', host, port);
+    process.on('uncaughtException', function (err) {
+        console.error('webkit-devtools-agent: uncaughtException: ');
+        console.error(err);
+        console.error(err.stack);
+    });
 
-    wss.on('connection', function(socket) {
-        process.send({
-            event: 'connection'
+    this.start = function() {
+        this.wss = new WebSocketServer({
+            port: this.port,
+            host: this.host
         });
 
-        process.on('message', function(message) {
-            var data = message.data;
+        console.log('webkit-devtools-agent started on %s:%s', host, port);
 
-            switch(message.event) {
-                case 'event':
-                case 'result':
-                    socket.send(JSON.stringify(data));
-            }
-        });
-
-        socket.on('message', function(message) {
-            try {
-                message = JSON.parse(message);
-            } catch(e) {
-                console.error(e);
-                return;
-            }
-
+        this.wss.on('connection', function(socket) {
             process.send({
-                event: 'method',
-                data: message
+                event: 'connection'
+            });
+
+            process.on('message', function(message) {
+                var data = message.data;
+
+                switch(message.event) {
+                    case 'event':
+                    case 'result':
+                        socket.send(JSON.stringify(data));
+                }
+            });
+
+            socket.on('message', function(message) {
+                try {
+                    message = JSON.parse(message);
+                } catch(e) {
+                    console.error(e);
+                    return;
+                }
+
+                process.send({
+                    event: 'method',
+                    data: message
+                });
             });
         });
-    });
-}
+    };
 
-function stop() {
-    if (wss) {
-        wss.close();
-        wss = null;
-        console.log('webkit-devtools-agent stopped');
-    }
-}
+    this.stop = function() {
+        if (this.wss) {
+            this.wss.close();
+            this.wss = null;
+            console.log('webkit-devtools-agent stopped');
+        }
+    };
+}).call(DevToolsAgent.prototype);
 
-process.on('SIGUSR2', function() {
-    if (wss) {
-        stop();
-    } else {
-        start();
-    }
-});
+module.exports = new DevToolsAgent();
 
-process.on('uncaughtException', function (err) {
-    console.error('webkit-devtools-agent: uncaughtException: ');
-    console.error(err);
-    console.error(err.stack);
-});
 
