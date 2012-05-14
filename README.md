@@ -33,8 +33,11 @@ console.log('[%s] Server running at http://127.0.0.1:8080/', process.pid);
 Example: 
 `kill -SIGUSR2 <the process id of your nodejs app>`
 
-2. Using your browser, go to http://trac.webkit.org/export/head/trunk/Source/WebCore/inspector/front-end/inspector.html?ws=localhost:1337. It's important to make sure
-your browser supports websockets, otherwise the front-end won't be able to connect to the node agent whatsoever.
+2. Using your browser, go to
+
+http://c4milo.github.com/node-webkit-agent/18.0.1025.168/inspector.html?host=localhost:1337&page=0
+
+It's important to make sure your browser supports websockets, otherwise the front-end won't be able to connect to the node agent whatsoever.
 
 You can also change the agent port and host where it listen to by setting up the DEBUG_PORT and DEBUG_HOST environment variables.
 
