@@ -33,8 +33,11 @@ console.log('[%s] Server running at http://127.0.0.1:8080/', process.pid);
 Example: 
 `kill -SIGUSR2 <the process id of your nodejs app>`
 
-2. Using your browser, go to http://trac.webkit.org/export/head/trunk/Source/WebCore/inspector/front-end/inspector.html?ws=localhost:1337. It's important to make sure
-your browser supports websockets, otherwise the front-end won't be able to connect to the node agent whatsoever.
+2. Using your browser, go to
+
+http://c4milo.github.com/node-webkit-agent/18.0.1025.168/inspector.html?host=localhost:1337&page=0
+
+It's important to make sure your browser supports websockets, otherwise the front-end won't be able to connect to the node agent whatsoever.
 
 You can also change the agent port and host where it listen to by setting up the DEBUG_PORT and DEBUG_HOST environment variables.
 
@@ -49,3 +52,26 @@ For more documentation about how to use and interpret devtools, please go to the
 
 
 Happy Debugging!
+
+## License
+(The MIT License)
+
+Copyright 2010 Camilo Aguilar. All rights reserved.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to
+deal in the Software without restriction, including without limitation the
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+sell copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+IN THE SOFTWARE.
