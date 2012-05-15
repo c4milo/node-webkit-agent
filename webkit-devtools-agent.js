@@ -1,7 +1,9 @@
+#!/usr/bin/env node
 var Debugger = require('./lib/debugger');
-var WebSocketServer = require('ws').Server;
+var WebSocket = require('ws');
+var WebSocketServer = WebSocket.Server;
 
-var DevToolsAgent = function() {
+var DevToolsAgentProxy = function() {
     this.wss = null;
     this.port = process.env.DEBUG_PORT || 9999;
     this.host = process.env.DEBUG_HOST || '127.0.0.1';
@@ -9,54 +11,33 @@ var DevToolsAgent = function() {
 
 (function() {
     var self = this;
-    process.on('SIGUSR2', function() {
-        if (self.wss) {
-            self.stop();
-        } else {
-            self.start();
-        }
-    });
-
     process.on('uncaughtException', function (err) {
-        console.error('webkit-devtools-agent: uncaughtException: ');
+        console.error('webkit-devtools-agent: Websockets service uncaught exception: ');
         console.error(err);
         console.error(err.stack);
     });
 
     this.start = function() {
-        this.wss = new WebSocketServer({
-            port: this.port,
-            host: this.host
-        });
+        var self = this;
 
-        console.log('webkit-devtools-agent started on %s:%s', host, port);
-
-        this.wss.on('connection', function(socket) {
-            process.send({
-                event: 'connection'
+        var backend = new WebSocket('ws://localhost:3333');
+        backend.on('open', function() {
+            //Starts websockets server for devtools front-end
+            self.wss = new WebSocketServer({
+                port: self.port,
+                host: self.host
             });
 
-            process.on('message', function(message) {
-                var data = message.data;
+            console.log('webkit-devtools-agent: Websockets ' +
+            'service started on %s:%s', self.host, self.port);
 
-                switch(message.event) {
-                    case 'event':
-                    case 'result':
-                        socket.send(JSON.stringify(data));
-                }
-            });
+            self.wss.on('connection', function(socket) {
+                backend.on('message', function(message) {
+                    socket.send(message);
+                });
 
-            socket.on('message', function(message) {
-                try {
-                    message = JSON.parse(message);
-                } catch(e) {
-                    console.error(e);
-                    return;
-                }
-
-                process.send({
-                    event: 'method',
-                    data: message
+                socket.on('message', function(message) {
+                    backend.send(message);
                 });
             });
         });
@@ -66,11 +47,19 @@ var DevToolsAgent = function() {
         if (this.wss) {
             this.wss.close();
             this.wss = null;
-            console.log('webkit-devtools-agent stopped');
+            console.log('webkit-devtools-agent: Websockets service with PID ' +
+            process.pid + ' stopped');
         }
     };
-}).call(DevToolsAgent.prototype);
+}).call(DevToolsAgentProxy.prototype);
 
-module.exports = new DevToolsAgent();
+var proxy = new DevToolsAgentProxy();
 
+proxy.start();
+
+['exit', 'SIGTERM', 'SIGHUP'].forEach(function(s) {
+    process.on(s, function() {
+        proxy.stop();
+    });
+});
 
