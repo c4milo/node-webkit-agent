@@ -17,6 +17,9 @@ var DevToolsAgent = function() {
     var spawnProxy = function() {
         var self = this;
 
+        //Parent PID for the proxy to know to whom to send the SIGUSR1 signal
+        process.env.PARENT_PID = process.pid;
+
         this.proxy = spawn(__dirname + '/webkit-devtools-agent.js', process.argv, {
             env: process.env,
             cwd: __dirname
@@ -51,7 +54,6 @@ var DevToolsAgent = function() {
         try {
             data = JSON.parse(message);
         } catch(e) {
-            console.log(e);
             console.log(e.stack);
             return;
         }
@@ -77,12 +79,13 @@ var DevToolsAgent = function() {
         });
     }.bind(this);
 
+    var sendEvent = function(data) {
+        if (!this.socket) return;
+        this.socket.send(JSON.stringify(data));
+    }.bind(this);
+
     var loadAgents = function() {
         var self = this;
-
-        var sendEvent = function(data) {
-            self.socket.send(JSON.stringify(data));
-        };
 
         var runtimeAgent = new agents.Runtime(sendEvent);
         this.agents = {};
@@ -156,7 +159,7 @@ if (!module.parent) {
 ['exit', 'uncaughtException'].forEach(function(e) {
     process.on(e, function(e) {
         if (e) {
-            console.log(e);
+            console.error(e.stack);
         }
         nodeAgent.stop();
     });

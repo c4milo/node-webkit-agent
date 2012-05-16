@@ -13,12 +13,13 @@ var DevToolsAgentProxy = function() {
     var self = this;
     process.on('uncaughtException', function (err) {
         console.error('webkit-devtools-agent: Websockets service uncaught exception: ');
-        console.error(err);
         console.error(err.stack);
     });
 
     this.start = function() {
         var self = this;
+
+        var debuggerAgent = new Debugger(process.env.PARENT_PID);
 
         var backend = new WebSocket('ws://localhost:3333');
         backend.on('open', function() {
@@ -37,7 +38,40 @@ var DevToolsAgentProxy = function() {
                 });
 
                 socket.on('message', function(message) {
-                    backend.send(message);
+                    var data;
+                    try {
+                        data = JSON.parse(message);
+                    } catch(e) {
+                        console.log(e.stack);
+                    }
+                    var command = data.method.split('.');
+                    var domainName = command[0];
+
+                    if (domainName !== 'Debugger') {
+                        backend.send(message);
+                        return;
+                    }
+
+                    debuggerAgent.initialize(function(notification) {
+                        socket.send(JSON.stringify(notification));
+                    });
+
+                    var id = data.id;
+                    var method = command[1];
+                    var params = data.params;
+
+                    if (!debuggerAgent[method]) {
+                        console.warn('%s is not implemented', data.method);
+                        return;
+                    }
+
+                    debuggerAgent[method](params, function(result) {
+                        var response = {
+                            id: id,
+                            result: result
+                        };
+                        socket.send(JSON.stringify(response));
+                    });
                 });
             });
         });
