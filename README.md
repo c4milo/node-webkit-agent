@@ -35,7 +35,7 @@ Example:
 
 2. Using your browser, go to
 
-http://c4milo.github.com/node-webkit-agent/18.0.1025.168/inspector.html?host=localhost:1337&page=0
+http://c4milo.github.com/node-webkit-agent/19.0.1084.46/inspector.html?host=localhost:1337&page=0
 
 It's important to make sure your browser supports websockets, otherwise the front-end won't be able to connect to the node agent whatsoever.
 
