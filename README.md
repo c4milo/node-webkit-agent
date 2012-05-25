@@ -1,8 +1,10 @@
+### Breadcumbs to automate the process
+
 ~/Dropbox/Development/cloudescape/depot_tools/gclient config https://src.chromium.org/chrome/releases/18.0.1025.168
 
 ~/Dropbox/Development/cloudescape/depot_tools/gclient sync
 
-cd ~/Development/chromium/src/third_party/WebKit
+cd ~/Development/chromium/src/third_party/WebKit &&
 Source/WebCore/inspector/compile-front-end.sh
 
 cp Source/WebCore/inspector/Inspector.json ~/Dropbox/Development/cloudescape/node-webkit-agent
