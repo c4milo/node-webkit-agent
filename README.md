@@ -9,10 +9,8 @@ This module allows you to debug and profile remotely your nodejs applications
 leveraging the following features by re-using the [built-in devtools front-end](http://code.google.com/chrome/devtools/docs/overview.html)
 that comes with any webkit-based browser such as Chrome and Safari.
 
-* Remote debugging
 * Remote heap and CPU profiling
-* Remote console
-* Network monitoring
+* More are coming.
 
 ##Installation
 `npm install webkit-devtools-agent`
