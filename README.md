@@ -2,6 +2,18 @@
 
 ~/Dropbox/Development/cloudescape/depot_tools/gclient config https://src.chromium.org/chrome/releases/18.0.1025.168
 
+Include the following in .gclient to reduce the size of the checkout
+```json
+  "custom_deps": {      
+    "src/third_party/WebKit/LayoutTests": None,
+    "src/chrome/tools/test/reference_build/chrome_win": None,
+    "src/chrome_frame/tools/test/reference_build/chrome_win": None,
+    "src/chrome/tools/test/reference_build/chrome_linux": None,
+    "src/chrome/tools/test/reference_build/chrome_mac": None,
+    "src/third_party/hunspell_dictionaries": None,
+  },
+```
+
 ~/Dropbox/Development/cloudescape/depot_tools/gclient sync
 
 cd ~/Development/chromium/src/third_party/WebKit &&
