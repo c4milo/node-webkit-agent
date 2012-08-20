@@ -33,9 +33,9 @@ Example:
 
 2. Using your browser, go to devtools frontend URL corresponding to your nodejs version
 ##### Nodejs v0.6.x
-http://c4milo.github.com/node-webkit-agent/19.0.1084.46/inspector.html?host=localhost:8080&page=0
+http://c4milo.github.com/node-webkit-agent/19.0.1084.46/inspector.html?host=localhost:1337&page=0
 ##### Nodejs v0.8.x
-http://c4milo.github.com/node-webkit-agent/21.0.1180.57/inspector.html?host=localhost:8080&page=0
+http://c4milo.github.com/node-webkit-agent/21.0.1180.57/inspector.html?host=localhost:1337&page=0
 
 It's important to make sure your browser supports websockets, otherwise the front-end won't be able to connect to the node agent whatsoever.
 
