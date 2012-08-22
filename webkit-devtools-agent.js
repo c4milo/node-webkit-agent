@@ -2,6 +2,32 @@
 var Debugger = require('./lib/debugger');
 var WebSocket = require('ws');
 var WebSocketServer = WebSocket.Server;
+var static = require('node-static');
+var http = require('http');
+
+var path = (function () {
+    var verMap = {
+        '0.6' : '19.0.1084.46',
+        '0.8' : '21.0.1180.57'
+    }
+
+    var ver = process.version.match(/^v(\d+\.\d+)/);
+
+    if (ver !== null) {
+        ver = ver[1];
+
+        if (verMap[ver]) {
+            return verMap[ver];
+        }
+    }
+
+    var vers = Object.keys(verMap);
+    
+    // Unsupported version, use the last version.
+    return verMap[vers[vers.length]];
+})();
+
+var file = new static.Server('./public/' + path);
 
 var DevToolsAgentProxy = module.exports = function() {
     this.wss = null;
@@ -78,13 +104,17 @@ var DevToolsAgentProxy = module.exports = function() {
      */
     this.onBackendOpen = function() {
         //Starts websockets server for DevTools frontend
+        this.server = http.createServer(function (req, res) {
+            req.on('end', file.serve.bind(file, req, res));
+        }).listen(this.port, this.host);
         this.wss = new WebSocketServer({
-            port: this.port,
-            host: this.host
+            server : this.server
         });
 
         console.log('webkit-devtools-agent: Websockets ' +
         'service started on %s:%s', this.host, this.port);
+        console.log('open http://%s:%s/inspector.html?host=%s:%s&page=0',
+            this.host, this.port, this.host, this.port);
 
         this.wss.on('connection', this.onFrontendConnection.bind(this));
     };

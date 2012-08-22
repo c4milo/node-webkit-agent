@@ -1,4 +1,7 @@
-# Node Webkit Agent
+# Awesome Node Webkit Agent
+
+This is a fork of [c4milo/node-webkit-agent](https://github.com/c4milo/node-webkit-agent) to make it more developer friendly. By default when you require it, it starts and gives you a link(open http://localhost...), which is hosted by itself and you just connect it to ONCE. You don't need to refresh that page, again. It will get refreshed as soon as your node app is up.
+
 This module is an implementation of
 [Chrome developer tools protocol](http://code.google.com/chrome/devtools/docs/protocol/1.0/index.html).
 It is still pretty much a work in progress and only the heap and CPU profilers are working right now. Debugger, console
@@ -13,11 +16,11 @@ that comes with any webkit-based browser such as Chrome and Safari.
 * More are coming.
 
 ##Installation
-`npm install webkit-devtools-agent`
+`npm install webkit-devtools-agent@git://github.com/alFReD-NSH/node-webkit-agent.git`
 
 ##Example
 ```javascript
-var agent = require('webkit-devtools-agent');
+require('webkit-devtools-agent');
 var http = require('http');
 http.createServer(function (req, res) {
   res.writeHead(200, {'Content-Type': 'text/plain'});
@@ -27,15 +30,7 @@ console.log('[%s] Server running at http://127.0.0.1:8080/', process.pid);
 ```
 ##Connecting to the agent
 
-1. Activate the agent, in your nodejs application, by sending a SIGUSR2 signal to its process id. To de-activate, send the signal once again.
-Example: 
-`kill -SIGUSR2 <the process id of your nodejs app>`
-
-2. Using your browser, go to devtools frontend URL corresponding to your nodejs version
-##### Nodejs v0.6.x
-http://c4milo.github.com/node-webkit-agent/19.0.1084.46/inspector.html?host=localhost:1337&page=0
-##### Nodejs v0.8.x
-http://c4milo.github.com/node-webkit-agent/21.0.1180.57/inspector.html?host=localhost:1337&page=0
+Just open the link it gives you!
 
 It's important to make sure your browser supports websockets, otherwise the front-end won't be able to connect to the node agent whatsoever.
 
