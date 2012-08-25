@@ -349,19 +349,34 @@ WebInspector.loaded = function()
     if ("page" in WebInspector.queryParamsObject) {
         var page = WebInspector.queryParamsObject.page;
         var host = "host" in WebInspector.queryParamsObject ? WebInspector.queryParamsObject.host : window.location.host;
-        WebInspector.socket = new WebSocket("ws://" + host + "/devtools/page/" + page);
-        WebInspector.socket.onmessage = function(message) { InspectorBackend.dispatch(message.data); }
-        WebInspector.socket.onerror = function(error) { console.error(error); }
-        WebInspector.socket.onopen = function() {
-            InspectorFrontendHost.sendMessageToBackend = WebInspector.socket.send.bind(WebInspector.socket);
+        var ws =  "ws://" + host + "/devtools/page/" + page;
+        WebInspector.connect(ws).onopen = function ()
+        {
             WebInspector.doLoadedDone();
-        }
-        WebInspector.socket.onclose = function () {
-            setTimeout(WebInspector.loaded, 1000);
         }
         return;
     }
     WebInspector.doLoadedDone();
+}
+
+WebInspector.connect = function(ws)
+{
+    ver self = {
+        onopen : function (){}
+    }
+    WebInspector.socket = new WebSocket(ws);
+    WebInspector.socket.onmessage = function(message) { InspectorBackend.dispatch(message.data); }
+    WebInspector.socket.onerror = function(error) { console.error(error); }
+    WebInspector.socket.onopen = function() {
+        InspectorFrontendHost.sendMessageToBackend = WebInspector.socket.send.bind(WebInspector.socket);
+        self.onopen();
+    }
+    WebInspector.socket.onclose = function () {
+        self.onopen = function (){};
+        setTimeout(WebInspector.connect.bind(WebInspector, ws), 1000);
+    }
+
+    return self;
 }
 
 WebInspector.doLoadedDone = function()
