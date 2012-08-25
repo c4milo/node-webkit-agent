@@ -186,21 +186,9 @@ var DevToolsAgent = module.exports = function() {
 var nodeAgent = new DevToolsAgent();
 
 /**
- * Prepares signal handler to activate the agent
- * upon `SIGUSR2` signal which usually is triggered by `kill -SIGUSR2`
- * in unix environments.
+ * Start the agent.
  **/
-if (!module.parent) {
-    nodeAgent.start();
-} else {
-    process.on('SIGUSR2', function() {
-        if (nodeAgent.server) {
-            nodeAgent.stop();
-        } else {
-            nodeAgent.start();
-        }
-    });
-}
+nodeAgent.start();
 
 /**
  * Avoids process termination due to uncaught exceptions
