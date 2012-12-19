@@ -9,7 +9,7 @@ var DevToolsAgentProxy = module.exports = function() {
     this.frontend = null;
     this.debuggerAgent = null;
     this.port = process.env.DEBUG_PORT || 9999;
-    this.host = process.env.DEBUG_HOST || '127.0.0.1';
+    this.host = process.env.DEBUG_HOST || '0.0.0.0';
 };
 
 (function() {
