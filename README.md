@@ -1,4 +1,7 @@
 # Node Webkit Agent
+<a href="http://flattr.com/thing/799265/c4milonode-webkit-agent-on-GitHub" target="_blank">
+<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a>
+
 This module is an implementation of
 [Chrome developer tools protocol](http://code.google.com/chrome/devtools/docs/protocol/1.0/index.html).
 It is still pretty much a work in progress and only the heap and CPU profilers are working right now. Debugger, console
