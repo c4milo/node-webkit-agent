@@ -13,3 +13,4 @@ setInterval(function() {
     console.log(i++);
 }, 3000);*/
 console.log('Server running at http://127.0.0.1:9000/ , pid-> ' + process.pid);
+process.kill(process.pid, 'SIGUSR2');
