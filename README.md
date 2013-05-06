@@ -11,8 +11,7 @@ that comes with any webkit-based browser such as Chrome and Safari.
 
 * Remote debugging
 * Remote heap and CPU profiling
-* Remote console
-* Network monitoring
+* More agents are coming.
 
 ##Installation
 `npm install webkit-devtools-agent`
@@ -30,18 +29,23 @@ console.log('[%s] Server running at http://127.0.0.1:8080/', process.pid);
 ##Connecting to the agent
 
 1. Activate the agent, in your nodejs application, by sending a SIGUSR2 signal to its process id. To de-activate, send the signal once again.
-Example: 
+Example:
 `kill -SIGUSR2 <the process id of your nodejs app>`
 
-2. Using your browser, go to
-
-http://c4milo.github.com/node-webkit-agent/18.0.1025.168/inspector.html?host=localhost:1337&page=0
+2. Using your browser, go to devtools frontend URL corresponding to your nodejs version
+##### Nodejs v0.6.x
+http://c4milo.github.io/node-webkit-agent/19.0.1084.46/inspector.html?host=localhost:9999&page=0
+##### Nodejs v0.8.x and v0.10.x
+http://c4milo.github.io/node-webkit-agent/26.0.1410.65/inspector.html?host=localhost:9999&page=0
 
 It's important to make sure your browser supports websockets, otherwise the front-end won't be able to connect to the node agent whatsoever.
 
 You can also change the agent port and host where it listen to by setting up the DEBUG_PORT and DEBUG_HOST environment variables.
 
 For more documentation about how to use and interpret devtools, please go to the [Devtools official documentation](http://code.google.com/chrome/devtools/docs/overview.html)
+
+## Heads Up
+ABI compatibility is breaking between nodejs v0.6.x and v0.8.x, therefore if you switch nodejs versions you would have to re-install webkit-devtools-agent again. See issue #11.
 
 ##Screenshots
 ### CPU profiling
@@ -56,7 +60,7 @@ Happy Debugging!
 ## License
 (The MIT License)
 
-Copyright 2010 Camilo Aguilar. All rights reserved.
+Copyright 2013 Camilo Aguilar. All rights reserved.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to
