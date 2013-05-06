@@ -13,7 +13,7 @@ leveraging the following features by re-using the [built-in devtools front-end](
 that comes with any webkit-based browser such as Chrome and Safari.
 
 * Remote heap and CPU profiling
-* More are coming.
+* More agents are coming.
 
 ##Installation
 `npm install webkit-devtools-agent`
@@ -36,9 +36,9 @@ Example:
 
 2. Using your browser, go to devtools frontend URL corresponding to your nodejs version
 ##### Nodejs v0.6.x
-http://c4milo.github.com/node-webkit-agent/19.0.1084.46/inspector.html?host=localhost:1337&page=0
-##### Nodejs v0.8.x
-http://c4milo.github.com/node-webkit-agent/21.0.1180.57/inspector.html?host=localhost:1337&page=0
+http://c4milo.github.io/node-webkit-agent/19.0.1084.46/inspector.html?host=localhost:9999&page=0
+##### Nodejs v0.8.x and v0.10.x
+http://c4milo.github.io/node-webkit-agent/26.0.1410.65/inspector.html?host=localhost:9999&page=0
 
 It's important to make sure your browser supports websockets, otherwise the front-end won't be able to connect to the node agent whatsoever.
 
@@ -47,8 +47,7 @@ You can also change the agent port and host where it listen to by setting up the
 For more documentation about how to use and interpret devtools, please go to the [Devtools official documentation](http://code.google.com/chrome/devtools/docs/overview.html)
 
 ## Heads Up
-ABI compatibility is breaking between nodejs v0.6.x and v0.8.x, therefore if you switch nodejs versions you would have to re-install 
-webkit-devtools-agent again. See issue #11.
+ABI compatibility is breaking between nodejs v0.6.x and v0.8.x, therefore if you switch nodejs versions you would have to re-install webkit-devtools-agent again. See issue #11.
 
 ##Screenshots
 ### CPU profiling
@@ -63,7 +62,7 @@ Happy Debugging!
 ## License
 (The MIT License)
 
-Copyright 2012 Camilo Aguilar. All rights reserved.
+Copyright 2013 Camilo Aguilar. All rights reserved.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to
