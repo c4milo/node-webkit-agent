@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-var Debugger = require('./lib/debugger');
+//var Debugger = require('./lib/debugger');
 var WebSocket = require('ws');
 var WebSocketServer = WebSocket.Server;
 
@@ -38,7 +38,7 @@ var DevToolsAgentProxy = module.exports = function() {
         var method = command[1];
         var params = data.params;
 
-        if (!this.debuggerAgent[method]) {
+        /*if (!this.debuggerAgent[method]) {
             console.warn('%s is not implemented', data.method);
             return;
         }
@@ -49,7 +49,7 @@ var DevToolsAgentProxy = module.exports = function() {
                 result: result
             };
             self.frontend.send(JSON.stringify(response));
-        });
+        });*/
     };
 
     this.onFrontendConnection = function(socket) {
@@ -60,11 +60,11 @@ var DevToolsAgentProxy = module.exports = function() {
 
         console.log('webkit-devtools-agent: new frontend connection!');
 
-        this.debuggerAgent = new Debugger(process.env.PARENT_PID);
+        //this.debuggerAgent = new Debugger(process.env.PARENT_PID);
 
-        this.debuggerAgent.initialize(function(notification) {
+        /*this.debuggerAgent.initialize(function(notification) {
             self.frontend.send(JSON.stringify(notification));
-        });
+        });*/
     };
 
     /**
