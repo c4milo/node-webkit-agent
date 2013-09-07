@@ -1,1 +1,157 @@
-Github pages
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Node-webkit-agent by c4milo</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="javascripts/scale.fix.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Node-webkit-agent</h1>
+        <p>NodeJS agent for WebKit devtools front-end</p>
+        <p class="view"><a href="https://github.com/c4milo/node-webkit-agent">View the Project on GitHub <small>c4milo/node-webkit-agent</small></a></p>
+        <ul>
+          <li><a href="https://github.com/c4milo/node-webkit-agent/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/c4milo/node-webkit-agent/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/c4milo/node-webkit-agent">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="node-webkit-agent" class="anchor" href="#node-webkit-agent"><span class="octicon octicon-link"></span></a>Node Webkit Agent</h1>
+
+<p><a href="http://flattr.com/thing/799265/c4milonode-webkit-agent-on-GitHub" target="_blank">
+<img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0"></a></p>
+
+<p>This module is an implementation of
+<a href="http://code.google.com/chrome/devtools/docs/protocol/1.0/index.html">Chrome developer tools protocol</a>.
+It is still pretty much a work in progress and only the heap and CPU profilers are working right now. Debugger, console
+and networking will be added soon.</p>
+
+<h2>
+<a name="features" class="anchor" href="#features"><span class="octicon octicon-link"></span></a>Features</h2>
+
+<p>This module allows you to debug and profile remotely your nodejs applications
+leveraging the following features by re-using the <a href="http://code.google.com/chrome/devtools/docs/overview.html">built-in devtools front-end</a>
+that comes with any webkit-based browser such as Chrome and Safari.</p>
+
+<ul>
+<li>Remote heap and CPU profiling</li>
+<li>More agents are coming.</li>
+</ul><h2>
+<a name="installation" class="anchor" href="#installation"><span class="octicon octicon-link"></span></a>Installation</h2>
+
+<p><code>npm install webkit-devtools-agent</code></p>
+
+<h2>
+<a name="example" class="anchor" href="#example"><span class="octicon octicon-link"></span></a>Example</h2>
+
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">agent</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'webkit-devtools-agent'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'http'</span><span class="p">);</span>
+<span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">(</span><span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s1">'Content-Type'</span><span class="o">:</span> <span class="s1">'text/plain'</span><span class="p">});</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="s1">'Hello World\n'</span><span class="p">);</span>
+<span class="p">}).</span><span class="nx">listen</span><span class="p">(</span><span class="mi">8080</span><span class="p">,</span> <span class="s1">'127.0.0.1'</span><span class="p">);</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">'[%s] Server running at http://127.0.0.1:8080/'</span><span class="p">,</span> <span class="nx">process</span><span class="p">.</span><span class="nx">pid</span><span class="p">);</span>
+</pre></div>
+
+<h2>
+<a name="connecting-to-the-agent" class="anchor" href="#connecting-to-the-agent"><span class="octicon octicon-link"></span></a>Connecting to the agent</h2>
+
+<ol>
+<li><p>Activate the agent, in your nodejs application, by sending a SIGUSR2 signal to its process id. To de-activate, send the signal once again.
+Example: 
+<code>kill -SIGUSR2 &lt;the process id of your nodejs app&gt;</code></p></li>
+<li>
+<p>Using your browser, go to devtools frontend URL corresponding to your nodejs version</p>
+
+<h5>
+<a name="nodejs-v06x" class="anchor" href="#nodejs-v06x"><span class="octicon octicon-link"></span></a>Nodejs v0.6.x</h5>
+
+<p><a href="http://c4milo.github.io/node-webkit-agent/19.0.1084.46/inspector.html?host=localhost:9999&amp;page=0">http://c4milo.github.io/node-webkit-agent/19.0.1084.46/inspector.html?host=localhost:9999&amp;page=0</a></p>
+
+<h5>
+<a name="nodejs-v08x-and-v010x" class="anchor" href="#nodejs-v08x-and-v010x"><span class="octicon octicon-link"></span></a>Nodejs v0.8.x and v0.10.x</h5>
+
+<p><a href="http://c4milo.github.io/node-webkit-agent/26.0.1410.65/inspector.html?host=localhost:9999&amp;page=0">http://c4milo.github.io/node-webkit-agent/26.0.1410.65/inspector.html?host=localhost:9999&amp;page=0</a></p>
+</li>
+</ol><p>It's important to make sure your browser supports websockets, otherwise the front-end won't be able to connect to the node agent whatsoever.</p>
+
+<p>You can also change the agent port and host where it listen to by setting up the DEBUG_PORT and DEBUG_HOST environment variables.</p>
+
+<p>For more documentation about how to use and interpret devtools, please go to the <a href="http://code.google.com/chrome/devtools/docs/overview.html">Devtools official documentation</a></p>
+
+<h2>
+<a name="heads-up" class="anchor" href="#heads-up"><span class="octicon octicon-link"></span></a>Heads Up</h2>
+
+<p>ABI compatibility is breaking between nodejs v0.6.x and v0.8.x, therefore if you switch nodejs versions you would have to re-install webkit-devtools-agent again. See issue #11.</p>
+
+<h2>
+<a name="screenshots" class="anchor" href="#screenshots"><span class="octicon octicon-link"></span></a>Screenshots</h2>
+
+<h3>
+<a name="cpu-profiling" class="anchor" href="#cpu-profiling"><span class="octicon octicon-link"></span></a>CPU profiling</h3>
+
+<p><img src="http://i.imgur.com/XLFG5.png" alt="Screenshot"></p>
+
+<h3>
+<a name="heap-profiling" class="anchor" href="#heap-profiling"><span class="octicon octicon-link"></span></a>Heap Profiling</h3>
+
+<p><img src="http://i.imgur.com/2jkme.png" alt="Screenshot"></p>
+
+<p>Happy Debugging!</p>
+
+<h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>(The MIT License)</p>
+
+<p>Copyright 2013 Camilo Aguilar. All rights reserved.</p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to
+deal in the Software without restriction, including without limitation the
+rights to use, copy, modify, merge, publish, distribute, sublicense, and/or
+sell copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+IN THE SOFTWARE.</p>
+      </section>
+    </div>
+    <footer>
+      <p>Project maintained by <a href="https://github.com/c4milo">c4milo</a></p>
+      <p>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></p>
+    </footer>
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+              <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-43856607-2");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
