@@ -29,7 +29,7 @@ var DevToolsAgent = module.exports = function() {
         //Parent PID for the proxy to know to whom to send the SIGUSR1 signal
         process.env.PARENT_PID = process.pid;
 
-        this.proxy = spawn(__dirname + '/webkit-devtools-agent.js', process.argv, {
+        this.proxy = spawn('node', [__dirname + '/webkit-devtools-agent.js'], process.argv, {
             env: process.env,
             cwd: __dirname
         });
