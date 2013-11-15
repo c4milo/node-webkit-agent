@@ -5,7 +5,6 @@ http.createServer(function (req, res) {
     console.log('boooo');
   res.writeHead(200, {'Content-Type': 'text/plain'});
   res.end('Hello World\n');
-console.log('nooooooooooooooooo');
 }).listen(9000, '127.0.0.1');
 
 /*var i = 0;
