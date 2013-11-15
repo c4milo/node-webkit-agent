@@ -4,3 +4,5 @@ build
 .lock-wscript
 *.swo
 *.swp
+/profiler.node
+
