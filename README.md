@@ -30,9 +30,13 @@ console.log('[%s] Server running at http://127.0.0.1:8080/', process.pid);
 ```
 ##Connecting to the agent
 
-1. Activate the agent, in your nodejs application, by sending a SIGUSR2 signal to its process id. To de-activate, send the signal once again.
+1. Activate the agent in your nodejs application by sending a SIGUSR2 signal to its process id. The signal might vary depending on your platform. To de-activate, send the signal once again.
 Example: 
-`kill -SIGUSR2 <the process id of your nodejs app>`
+```shell
+$ kill -SIGUSR2 <the process id of your nodejs app> # any POSIX-complaint platform
+$ kill -USR2 <the process id of your nodejs app> # OSX
+```
+
 
 2. Using your browser, go to devtools frontend URL corresponding to your nodejs version
 ##### Nodejs v0.6.x
