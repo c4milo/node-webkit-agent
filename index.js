@@ -211,7 +211,10 @@ if (!module.parent) {
         if (e) {
             console.error(e.stack);
         }
-        nodeAgent.stop();
+        
+        if (nodeAgent.server) {
+          nodeAgent.stop();    
+        }
     });
 });
 
