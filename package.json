@@ -11,7 +11,7 @@
     "v8"
   ],
   "homepage": "http://github.com/c4milo/node-webkit-agent",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "author": "Camilo Aguilar",
   "repository": "git://github.com/c4milo/node-webkit-agent",
   "engines": {
