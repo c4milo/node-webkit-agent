@@ -29,9 +29,9 @@ http.createServer(function (req, res) {
 }).listen(8080, '127.0.0.1');
 console.log('[%s] Server running at http://127.0.0.1:8080/', process.pid);
 ```
-##Connecting to the agent
+## Connecting to the agent
 
-1. Activate the agent in your nodejs application by sending a SIGUSR2 signal to its process id. The signal might vary depending on your platform. To de-activate, send the signal once again.
+* Activate the agent in your nodejs application by sending a SIGUSR2 signal to its process id. The signal might vary depending on your platform. To de-activate, send the signal once again.
 Example: 
 ```shell
 $ kill -SIGUSR2 <the process id of your nodejs app> # any POSIX-complaint platform
@@ -39,9 +39,11 @@ $ kill -USR2 <the process id of your nodejs app> # OSX
 ```
 
 
-2. Using your browser, go to devtools frontend URL corresponding to your nodejs version
+* Using your browser, go to devtools frontend URL corresponding to your nodejs version:
+
 ##### Nodejs v0.6.x
 http://c4milo.github.io/node-webkit-agent/19.0.1084.46/inspector.html?host=localhost:9999&page=0
+
 ##### Nodejs v0.8.x and v0.10.x
 http://c4milo.github.io/node-webkit-agent/26.0.1410.65/inspector.html?host=localhost:9999&page=0
 
