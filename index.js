@@ -175,9 +175,8 @@ var DevToolsAgent = module.exports = function() {
         if (this.server) {
             this.server.close();
             this.server = null;
+            console.log('webkit-devtools-agent: stopped');
         }
-
-        console.log('webkit-devtools-agent: stopped');
     };
 }).call(DevToolsAgent.prototype);
 
