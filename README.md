@@ -8,7 +8,7 @@ This module is an implementation of
 It is still pretty much a work in progress and only the heap and CPU profilers are working right now. Debugger, console
 and networking will be added soon.
 
-##Features
+## Features
 This module allows you to debug and profile remotely your nodejs applications
 leveraging the following features by re-using the [built-in devtools front-end](http://code.google.com/chrome/devtools/docs/overview.html)
 that comes with any webkit-based browser such as Chrome and Safari.
@@ -16,10 +16,10 @@ that comes with any webkit-based browser such as Chrome and Safari.
 * Remote heap and CPU profiling
 * More agents are coming.
 
-##Installation
+## Installation
 `npm install webkit-devtools-agent`
 
-##Example
+## Example
 ```javascript
 var agent = require('webkit-devtools-agent');
 var http = require('http');
@@ -54,9 +54,9 @@ You can also change the agent port and host where it listen to by setting up the
 For more documentation about how to use and interpret devtools, please go to the [Devtools official documentation](http://code.google.com/chrome/devtools/docs/overview.html)
 
 ## Heads Up
-ABI compatibility is breaking between nodejs v0.6.x and v0.8.x, therefore if you switch nodejs versions you would have to re-install webkit-devtools-agent again. See issue #11.
+API compatibility is breaking between nodejs v0.6.x and v0.8.x, therefore if you switch nodejs versions you would have to re-install webkit-devtools-agent again. See issue #11.
 
-##Screenshots
+## Screenshots
 ### CPU profiling
 ![Screenshot](http://i.imgur.com/XLFG5.png)
 
