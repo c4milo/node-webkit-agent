@@ -1,7 +1,7 @@
 srcdir = "."
 blddir = "build"
 APPNAME = "profiler"
-VERSION = "0.1.0"
+VERSION = "0.2.5"
 
 def set_options(ctx):
   ctx.add_option('--exe', action='store_true', default=False)
