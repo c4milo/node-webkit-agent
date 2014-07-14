@@ -8,9 +8,10 @@ var DevToolsAgentProxy = module.exports = function() {
     this.backend = null;
     this.frontend = null;
     this.debuggerAgent = null;
-    this.port = process.env.DEBUG_PORT || 9999;
-    this.host = process.env.DEBUG_HOST || '0.0.0.0';
-    this.internal_port = process.env.WEBKIT_AGENT_INTERNAL_PORT || 3333;
+    this.port = process.argv[2] || process.env.DEBUG_PORT || 9999;
+    this.host = process.argv[3] || process.env.DEBUG_HOST || '0.0.0.0';
+    this.internal_port = process.argv[4] || process.env.WEBKIT_AGENT_INTERNAL_PORT || 3333;
+    this.log = (process.argv[5] !== undefined) ? (process.argv[5]==='true') : ((process.env.WEBKIT_AGENT_INTERNAL_LOG==='true') || true);
 };
 
 (function() {
@@ -59,7 +60,8 @@ var DevToolsAgentProxy = module.exports = function() {
 
         this.frontend.on('message', this.onFrontendMessage.bind(this));
 
-        console.log('webkit-devtools-agent: new frontend connection!');
+        if(this.log === true)
+            console.log('webkit-devtools-agent: new frontend connection!');
 
         //this.debuggerAgent = new Debugger(process.env.PARENT_PID);
 
@@ -84,8 +86,9 @@ var DevToolsAgentProxy = module.exports = function() {
             host: this.host
         });
 
-        console.log('webkit-devtools-agent: Websockets ' +
-        'service started on %s:%s', this.host, this.port);
+        if(this.log === true)
+            console.log('webkit-devtools-agent: Websockets ' +
+            'service started on %s:%s', this.host, this.port);
 
         this.wss.on('connection', this.onFrontendConnection.bind(this));
     };
@@ -135,8 +138,9 @@ var DevToolsAgentProxy = module.exports = function() {
         if (this.wss) {
             this.wss.close();
             this.wss = null;
-            console.log('webkit-devtools-agent: Websockets service with PID ' +
-            process.pid + ' has stopped');
+            if(this.log === true)
+                console.log('webkit-devtools-agent: Websockets service with PID ' +
+                process.pid + ' has stopped');
         }
     };
 }).call(DevToolsAgentProxy.prototype);

@@ -6,7 +6,7 @@ var WebSocketServer = require('ws').Server;
  * DevToolsAgent
  * @constructor
  **/
-var DevToolsAgent = module.exports = function() {
+var DevToolsAgent = function() {
     this.loadedAgents = {};
     this.proxy = null;
     this.server = null;
@@ -29,7 +29,7 @@ var DevToolsAgent = module.exports = function() {
         //Parent PID for the proxy to know to whom to send the SIGUSR1 signal
         process.env.PARENT_PID = process.pid;
 
-        this.proxy = spawn('node', [__dirname + '/webkit-devtools-agent.js'], process.argv, {
+        this.proxy = spawn('node', [__dirname + '/webkit-devtools-agent.js',this.port,this.host,this.internal_port,this.log], process.argv, {
             env: process.env,
             cwd: __dirname
         });
@@ -41,7 +41,8 @@ var DevToolsAgent = module.exports = function() {
 
         this.proxy.stdout.setEncoding('utf8');
         this.proxy.stdout.on('data', function (data) {
-            console.log(data);
+            if(this.log === true)
+                console.log(data);
         });
     };
 
@@ -52,8 +53,10 @@ var DevToolsAgent = module.exports = function() {
      * @api private
      **/
     this.onProxyConnection = function(socket) {
-        console.log('webkit-devtools-agent: A proxy got connected.');
-        console.log('webkit-devtools-agent: Waiting for commands...');
+        if(this.log === true) {
+            console.log('webkit-devtools-agent: A proxy got connected.');
+            console.log('webkit-devtools-agent: Waiting for commands...');
+        }
 
         this.socket = socket;
         this.socket.on('message', this.onProxyData.bind(this));
@@ -133,19 +136,25 @@ var DevToolsAgent = module.exports = function() {
      *
      * @api public
      **/
-    this.start = function() {
+    this.start = function(port,host,internal_port,log) {
         var self = this;
 
-        if (this.server) return;
+	this.port = port || process.env.DEBUG_PORT || 9999;
+	this.host = host || process.env.DEBUG_HOST || 'localhost';
+	this.internal_port = internal_port || process.env.WEBKIT_AGENT_INTERNAL_PORT || 3333;
+	this.log = (log !== undefined) ? log : ((process.env.WEBKIT_AGENT_INTERNAL_LOG==='true') || true);
+        
+if (this.server) return;
 
         this.server = new WebSocketServer({
-            port: process.env.WEBKIT_AGENT_INTERNAL_PORT || 3333,
-            host: 'localhost'
+            port: this.internal_port,
+            host: this.host
         });
 
         this.server.on('listening', function() {
-            console.log('webkit-devtools-agent: Spawning websocket ' +
-            'service process...');
+            if(this.log === true)
+                console.log('webkit-devtools-agent: Spawning websocket ' +
+                'service process...');
 
             //Spawns webkit devtools proxy / websockets server
             self.spawnProxy();
@@ -167,50 +176,23 @@ var DevToolsAgent = module.exports = function() {
         }
 
         if (this.proxy && this.proxy.pid) {
-            console.log('webkit-devtools-agent: Terminating websockets service' +
-            ' with PID: ' + this.proxy.pid + '...');
+            if(this.log === true)
+                console.log('webkit-devtools-agent: Terminating websockets service' +
+                ' with PID: ' + this.proxy.pid + '...');
             process.kill(this.proxy.pid, 'SIGTERM');
         }
 
         if (this.server) {
             this.server.close();
             this.server = null;
-            console.log('webkit-devtools-agent: stopped');
+            if(this.log === true)
+                console.log('webkit-devtools-agent: stopped');
         }
     };
 }).call(DevToolsAgent.prototype);
 
 /**
- * Creates an instance of the main function.
+ * Export a instance constructor of the main function.
  **/
-var nodeAgent = new DevToolsAgent();
-
-/**
- * Prepares signal handler to activate the agent
- * upon `SIGUSR2` signal which usually is triggered by `kill -SIGUSR2`
- * in unix environments.
- **/
-if (!module.parent) {
-    nodeAgent.start();
-} else {
-    process.on('SIGUSR2', function() {
-        if (nodeAgent.server) {
-            nodeAgent.stop();
-        } else {
-            nodeAgent.start();
-        }
-    });
-}
-
-/**
- * Avoids process termination due to uncaught exceptions
- **/
-['exit', 'uncaughtException'].forEach(function(e) {
-    process.on(e, function(e) {
-        if (e) {
-            console.error(e.stack);
-        }
-        nodeAgent.stop();
-    });
-});
+module.exports = exports = DevToolsAgent;
 
