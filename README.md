@@ -32,10 +32,9 @@ Once the agent is initiated, use any of the following hosted Devtools UIs to pro
 
 **Node v0.8.x and v0.10.x:** http://c4milo.github.io/node-webkit-agent/26.0.1410.65/inspector.html?host=localhost:9999&page=0
 
-It's important to make sure your browser supports websockets, otherwise the UI won't be able to connect to the node agent whatsoever.
+You can also use your browser's devtools frontend. It's important to make sure your browser supports websockets, otherwise the UI won't be able to connect to the node agent whatsoever.
 
 You can also change the agent port and binding address where it listen to by setting up the following parameters in the `agent.start()` function:
-
 
 
 For more documentation about how to use and interpret devtools, please go to the [Devtools official documentation](http://code.google.com/chrome/devtools/docs/overview.html)
@@ -76,7 +75,7 @@ process.on('SIGUSR2', function () {
 ```
 
 ## ABI compatibility
-[ABI](http://en.wikipedia.org/wiki/Application_binary_interface) compatibility breaks between Node v0.6.x and v0.8.x. Therefore, if you switch Node versions you would have to re-install `webkit-devtools-agent` again. See issue #11.
+[ABI](http://en.wikipedia.org/wiki/Application_binary_interface) compatibility breaks between Node v0.6.x and v0.8.x. Therefore, if you switch Node versions you would have to re-install `webkit-devtools-agent` again. See issue [#11](https://github.com/c4milo/node-webkit-agent/issues/11).
 
 ## Screenshots
 ### CPU profiling
