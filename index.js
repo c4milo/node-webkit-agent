@@ -6,14 +6,14 @@ var WebSocketServer = require('ws').Server;
  * DevToolsAgent
  * @constructor
  **/
-var DevToolsAgent = function() {
+var DevToolsAgent = function () {
     this.loadedAgents = {};
     this.proxy = null;
     this.server = null;
     this.socket = null;
 };
 
-(function() {
+(function () {
     /**
      * Spawns a new process with a websockets service proxy
      * to serve devtools front-end requests.
@@ -23,13 +23,15 @@ var DevToolsAgent = function() {
      *
      * @api private
      **/
-    this.spawnProxy = function() {
+    this.spawnProxy = function () {
         var self = this;
 
         //Parent PID for the proxy to know to whom to send the SIGUSR1 signal
         process.env.PARENT_PID = process.pid;
 
-        this.proxy = spawn('node', [__dirname + '/webkit-devtools-agent.js',this.port,this.host,this.internal_port,this.log], process.argv, {
+        this.proxy = spawn('node', [__dirname + '/webkit-devtools-agent.js',
+                            this.port, this.bind_to, this.ipc_port,
+                            this.verbose], process.argv, {
             env: process.env,
             cwd: __dirname
         });
@@ -41,8 +43,9 @@ var DevToolsAgent = function() {
 
         this.proxy.stdout.setEncoding('utf8');
         this.proxy.stdout.on('data', function (data) {
-            if(this.log === true)
+            if (this.verbose) {
                 console.log(data);
+            }
         });
     };
 
@@ -52,8 +55,8 @@ var DevToolsAgent = function() {
      * @param {net.Socket} socket The just opened network socket.
      * @api private
      **/
-    this.onProxyConnection = function(socket) {
-        if(this.log === true) {
+    this.onProxyConnection = function (socket) {
+        if (this.verbose) {
             console.log('webkit-devtools-agent: A proxy got connected.');
             console.log('webkit-devtools-agent: Waiting for commands...');
         }
@@ -71,7 +74,7 @@ var DevToolsAgent = function() {
      * @param {String} message A message coming from the proxy process.
      * @api private
      **/
-    this.onProxyData = function(message) {
+    this.onProxyData = function (message) {
         var self = this;
 
         try {
@@ -110,7 +113,7 @@ var DevToolsAgent = function() {
      * @param {Object} A notification object that follows devtools protocol 1.0
      * @api private
      **/
-    this.notify = function(notification) {
+    this.notify = function (notification) {
         if (!this.socket) return;
         this.socket.send(JSON.stringify(notification));
     };
@@ -119,8 +122,7 @@ var DevToolsAgent = function() {
      * Loads every agent required at the top of this file.
      * @private
      **/
-
-    this.loadAgents = function() {
+    this.loadAgents = function () {
         var runtimeAgent = new agents.Runtime(this.notify.bind(this));
 
         for (var agent in agents) {
@@ -136,31 +138,35 @@ var DevToolsAgent = function() {
      *
      * @api public
      **/
-    this.start = function(port,host,internal_port,log) {
+    this.start = function (config) {
         var self = this;
+        config = config || {}
+        this.port = config.port || 9999;
+        this.bind_to = config.bind_to || 'localhost';
+        this.ipc_port = config.ipc_port || 3333;
+        this.verbose = config.verbose || false;
 
-	this.port = port || process.env.DEBUG_PORT || 9999;
-	this.host = host || process.env.DEBUG_HOST || 'localhost';
-	this.internal_port = internal_port || process.env.WEBKIT_AGENT_INTERNAL_PORT || 3333;
-	this.log = (log !== undefined) ? log : ((process.env.WEBKIT_AGENT_INTERNAL_LOG==='true') || true);
-        
-if (this.server) return;
+        if (this.server) {
+            return;
+        }
 
         this.server = new WebSocketServer({
-            port: this.internal_port,
-            host: this.host
+            port: this.ipc_port,
+            bind_to: this.bind_to
         });
 
         this.server.on('listening', function() {
-            if(this.log === true)
+            if (this.verbose) {
                 console.log('webkit-devtools-agent: Spawning websocket ' +
                 'service process...');
+            }
 
             //Spawns webkit devtools proxy / websockets server
             self.spawnProxy();
 
             self.loadAgents();
         });
+
         this.server.on('connection', this.onProxyConnection.bind(this));
     };
 
@@ -169,30 +175,30 @@ if (this.server) return;
      *
      * @api public
      **/
-    this.stop = function() {
+    this.stop = function () {
         if (this.socket) {
             this.socket.close();
             this.socket = null;
         }
 
         if (this.proxy && this.proxy.pid) {
-            if(this.log === true)
+            if (this.verbose) {
                 console.log('webkit-devtools-agent: Terminating websockets service' +
                 ' with PID: ' + this.proxy.pid + '...');
+            }
+
             process.kill(this.proxy.pid, 'SIGTERM');
         }
 
         if (this.server) {
             this.server.close();
             this.server = null;
-            if(this.log === true)
+
+            if (this.verbose) {
                 console.log('webkit-devtools-agent: stopped');
+            }
         }
     };
 }).call(DevToolsAgent.prototype);
 
-/**
- * Export a instance constructor of the main function.
- **/
-module.exports = exports = DevToolsAgent;
-
+module.exports = new DevToolsAgent();

@@ -3,24 +3,24 @@
 var WebSocket = require('ws');
 var WebSocketServer = WebSocket.Server;
 
-var DevToolsAgentProxy = module.exports = function() {
+var DevToolsAgentProxy = module.exports = function () {
     this.wss = null;
     this.backend = null;
     this.frontend = null;
     this.debuggerAgent = null;
-    this.port = process.argv[2] || process.env.DEBUG_PORT || 9999;
-    this.host = process.argv[3] || process.env.DEBUG_HOST || '0.0.0.0';
-    this.internal_port = process.argv[4] || process.env.WEBKIT_AGENT_INTERNAL_PORT || 3333;
-    this.log = (process.argv[5] !== undefined) ? (process.argv[5]==='true') : ((process.env.WEBKIT_AGENT_INTERNAL_LOG==='true') || true);
+    this.port = process.argv[2] || 9999;
+    this.bind_to = process.argv[3] || '0.0.0.0';
+    this.ipc_port = process.argv[4] || 3333;
+    this.verbose = process.argv[5] || false;
 };
 
-(function() {
+(function () {
     process.on('uncaughtException', function (err) {
         console.error('webkit-devtools-agent: Websockets service uncaught exception: ');
         console.error(err.stack);
     });
 
-    this.onFrontendMessage = function(message) {
+    this.onFrontendMessage = function (message) {
         var self = this;
         var data;
         try {
@@ -60,8 +60,9 @@ var DevToolsAgentProxy = module.exports = function() {
 
         this.frontend.on('message', this.onFrontendMessage.bind(this));
 
-        if(this.log === true)
+        if (this.verbose) {
             console.log('webkit-devtools-agent: new frontend connection!');
+        }
 
         //this.debuggerAgent = new Debugger(process.env.PARENT_PID);
 
@@ -79,16 +80,17 @@ var DevToolsAgentProxy = module.exports = function() {
      *
      * @api private
      */
-    this.onBackendOpen = function() {
+    this.onBackendOpen = function () {
         //Starts websockets server for DevTools frontend
         this.wss = new WebSocketServer({
             port: this.port,
-            host: this.host
+            host: this.bind_to
         });
 
-        if(this.log === true)
+        if (this.verbose) {
             console.log('webkit-devtools-agent: Websockets ' +
-            'service started on %s:%s', this.host, this.port);
+            'service started on %s:%s', this.bind_to, this.port);
+        }
 
         this.wss.on('connection', this.onFrontendConnection.bind(this));
     };
@@ -102,8 +104,10 @@ var DevToolsAgentProxy = module.exports = function() {
      * the main process.
      * @api private
      */
-    this.onBackendMessage = function(message) {
-        if (!this.frontend) return;
+    this.onBackendMessage = function (message) {
+        if (!this.frontend) {
+            return;
+        }
 
         this.frontend.send(message);
     };
@@ -123,8 +127,8 @@ var DevToolsAgentProxy = module.exports = function() {
      *
      * @api public
      **/
-    this.start = function() {
-        this.backend = new WebSocket('ws://localhost:' + this.internal_port);
+    this.start = function () {
+        this.backend = new WebSocket('ws://localhost:' + this.ipc_port);
         this.backend.on('open', this.onBackendOpen.bind(this));
         this.backend.on('message', this.onBackendMessage.bind(this));
     };
@@ -134,13 +138,14 @@ var DevToolsAgentProxy = module.exports = function() {
      *
      * @api public
      **/
-    this.stop = function() {
+    this.stop = function () {
         if (this.wss) {
             this.wss.close();
             this.wss = null;
-            if(this.log === true)
+            if (this.verbose) {
                 console.log('webkit-devtools-agent: Websockets service with PID ' +
                 process.pid + ' has stopped');
+            }
         }
     };
 }).call(DevToolsAgentProxy.prototype);
@@ -148,7 +153,7 @@ var DevToolsAgentProxy = module.exports = function() {
 var proxy = new DevToolsAgentProxy();
 proxy.start();
 
-['exit', 'SIGTERM', 'SIGHUP'].forEach(function(s) {
+['exit', 'SIGTERM', 'SIGHUP'].forEach(function (s) {
     process.on(s, function() {
         proxy.stop();
     });

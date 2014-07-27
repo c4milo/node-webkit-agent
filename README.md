@@ -5,13 +5,12 @@
 
 This module is an implementation of
 [Chrome developer tools protocol](http://code.google.com/chrome/devtools/docs/protocol/1.0/index.html).
-It is still pretty much a work in progress and only the heap and CPU profilers are working right now. Debugger, console
-and networking will be added soon.
+It is still pretty much a work in progress and only heap and CPU profilers are working right now. Help is wanted to finish implementing debugger, networking and console agents as well as a implementing from scratch a flamegraphs agent.
 
 ## Features
 This module allows you to debug and profile remotely your nodejs applications
 leveraging the following features by re-using the [built-in devtools front-end](http://code.google.com/chrome/devtools/docs/overview.html)
-that comes with any webkit-based browser such as Chrome and Safari.
+that comes with any webkit-based browsers such as Chrome or Safari.
 
 * Remote heap and CPU profiling
 * More agents are coming.
@@ -19,58 +18,72 @@ that comes with any webkit-based browser such as Chrome and Safari.
 ## Installation
 `npm install webkit-devtools-agent`
 
-## Example
+## Usage
+From within your Node application, just require the module as usual, and start the agent. For example:
+
 ```javascript
 var agent = require('webkit-devtools-agent');
-agent.start(9999, 'localhost', 3333, true);
-var http = require('http');
-http.createServer(function (req, res) {
-  res.writeHead(200, {'Content-Type': 'text/plain'});
-  res.end('Hello World\n');
-}).listen(8080, '127.0.0.1');
-console.log('[%s] Server running at http://127.0.0.1:8080/', process.pid);
-
-process.on('SIGUSR2', function() {
-  if (agent.server) {
-    agent.stop();
-  } else {
-    agent.start();
-  }
-});
-```
-## Connecting to the agent
-
-* Activate the agent in your nodejs application by sending a SIGUSR2 signal to its process id. The signal might vary depending on your platform. To de-activate, send the signal once again.
-Example: 
-```shell
-$ kill -SIGUSR2 <the process id of your nodejs app> # any POSIX-complaint platform
-$ kill -USR2 <the process id of your nodejs app> # OSX
+agent.start()
 ```
 
+Once the agent is initiated, use any of the following hosted Devtools UIs to profile your application.
 
-* Using your browser, go to devtools frontend URL corresponding to your nodejs version:
+**Node v0.6.x:** http://c4milo.github.io/node-webkit-agent/19.0.1084.46/inspector.html?host=localhost:9999&page=0
 
-##### Nodejs v0.6.x
-http://c4milo.github.io/node-webkit-agent/19.0.1084.46/inspector.html?host=localhost:9999&page=0
+**Node v0.8.x and v0.10.x:** http://c4milo.github.io/node-webkit-agent/26.0.1410.65/inspector.html?host=localhost:9999&page=0
 
-##### Nodejs v0.8.x and v0.10.x
-http://c4milo.github.io/node-webkit-agent/26.0.1410.65/inspector.html?host=localhost:9999&page=0
+It's important to make sure your browser supports websockets, otherwise the UI won't be able to connect to the node agent whatsoever.
 
-It's important to make sure your browser supports websockets, otherwise the front-end won't be able to connect to the node agent whatsoever.
+You can also change the agent port and binding address where it listen to by setting up the following parameters in the `agent.start()` function:
 
-You can also change the agent port and host where it listen to by setting up the DEBUG_PORT and DEBUG_HOST environment variables.
+
 
 For more documentation about how to use and interpret devtools, please go to the [Devtools official documentation](http://code.google.com/chrome/devtools/docs/overview.html)
 
-## Heads Up
-[ABI](http://en.wikipedia.org/wiki/Application_binary_interface) compatibility is breaking between nodejs v0.6.x and v0.8.x, therefore if you switch nodejs versions you would have to re-install webkit-devtools-agent again. See issue #11.
+## Example
+A more elaborated example looks like: 
+
+```javascript
+
+var agent = require('./index');
+
+// Assume this HTTP service is your service
+var http = require('http');
+http.createServer(function (req, res) {
+    console.log('boooo');
+    res.writeHead(200, {'Content-Type': 'text/plain'});
+    res.end('Hello World\n');
+}).listen(9000, '127.0.0.1');
+console.log('Server running at http://127.0.0.1:9000/ , pid-> ' + process.pid);
+
+// Now let's have a signal handler for SIGUSR2 that is going
+// to activate the devtools agent. You can use any other means to activate
+// the agent, not just signal handlers.
+process.on('SIGUSR2', function () {
+  if (agent.server) {
+    agent.stop();
+  } else {
+    agent.start({
+        port: 9999,
+        bind_to: '0.0.0.0',
+        ipc_port: 3333,
+        verbose: true
+    });
+  }
+});
+
+
+```
+
+## ABI compatibility
+[ABI](http://en.wikipedia.org/wiki/Application_binary_interface) compatibility breaks between Node v0.6.x and v0.8.x. Therefore, if you switch Node versions you would have to re-install `webkit-devtools-agent` again. See issue #11.
 
 ## Screenshots
 ### CPU profiling
-![Screenshot](http://i.imgur.com/XLFG5.png)
+![Screenshot](https://i.cloudup.com/gRwhjGtPFN.png)
 
 ### Heap Profiling
-![Screenshot](http://i.imgur.com/2jkme.png)
+![Screenshot](https://i.cloudup.com/nXVoWFV2HO.png)
 
 
 Happy Debugging!
