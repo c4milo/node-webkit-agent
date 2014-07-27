@@ -1,7 +1,8 @@
-[![Stories in Ready](https://badge.waffle.io/c4milo/node-webkit-agent.png?label=ready)](https://waffle.io/c4milo/node-webkit-agent)
 # Node Webkit Agent
+[![Stories in Ready](https://badge.waffle.io/c4milo/node-webkit-agent.png?label=ready)](https://waffle.io/c4milo/node-webkit-agent)
 <a href="http://flattr.com/thing/799265/c4milonode-webkit-agent-on-GitHub" target="_blank">
 <img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a>
+
 
 This module is an implementation of
 [Chrome developer tools protocol](http://code.google.com/chrome/devtools/docs/protocol/1.0/index.html).
