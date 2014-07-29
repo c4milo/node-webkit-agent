@@ -59,6 +59,8 @@ var DevToolsAgentProxy = module.exports = function () {
         this.frontend = socket;
 
         this.frontend.on('message', this.onFrontendMessage.bind(this));
+        
+        this.frontend.on('close', (function(){ this.frontend = null;}).bind(this));
 
         if (this.verbose) {
             console.log('webkit-devtools-agent: new frontend connection!');
