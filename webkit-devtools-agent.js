@@ -53,14 +53,18 @@ var DevToolsAgentProxy = module.exports = function () {
             self.frontend.send(JSON.stringify(response));
         });*/
     };
-
+    this.frontends = [];
     this.onFrontendConnection = function(socket) {
         var self = this;
-        this.frontend = socket;
-
-        this.frontend.on('message', this.onFrontendMessage.bind(this));
-        
-        this.frontend.on('close', (function(){ this.frontend = null;}).bind(this));
+        socket.on('message', this.onFrontendMessage.bind(this));
+        socket.on('close', (function(){
+          for(var i =0; i<this.frontends.length;i++){
+            if (this.frontends[i] === socket){
+              this.frontends.splice(i,1);
+            }
+          }
+        }).bind(this));
+        this.frontends.push(socket);
 
         if (this.verbose) {
             console.log('webkit-devtools-agent: new frontend connection!');
@@ -106,12 +110,8 @@ var DevToolsAgentProxy = module.exports = function () {
      * the main process.
      * @api private
      */
-    this.onBackendMessage = function (message) {
-        if (!this.frontend) {
-            return;
-        }
-
-        this.frontend.send(message);
+    this.onBackendMessage = function(message) {
+        this.frontends.forEach(function(socket){socket.send(message)});
     };
 
     /**
@@ -133,6 +133,7 @@ var DevToolsAgentProxy = module.exports = function () {
         this.backend = new WebSocket('ws://localhost:' + this.ipc_port);
         this.backend.on('open', this.onBackendOpen.bind(this));
         this.backend.on('message', this.onBackendMessage.bind(this));
+        this.frontends = [];
     };
 
     /**
@@ -142,6 +143,7 @@ var DevToolsAgentProxy = module.exports = function () {
      **/
     this.stop = function () {
         if (this.wss) {
+            this.frontends = [];
             this.wss.close();
             this.wss = null;
             if (this.verbose) {
