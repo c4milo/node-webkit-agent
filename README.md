@@ -89,6 +89,8 @@ process.on('SIGUSR2', function () {
 ### Heap Profiling
 ![Screenshot](https://i.cloudup.com/WR5MKG6i02.png)
 
+For detailed information on debugging memory leaks using devtools' heap comparisons (using this module), follow [this tutorial](https://developer.chrome.com/devtools/docs/javascript-memory-profiling).
+
 
 Happy Debugging!
 
