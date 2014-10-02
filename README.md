@@ -33,8 +33,6 @@ Once the agent is initiated, use any of the following hosted Devtools UIs to pro
 
 **Node v0.8.x and v0.10.x:** http://c4milo.github.io/node-webkit-agent/26.0.1410.65/inspector.html?host=localhost:9999&page=0
 
-You can also use your browser's devtools frontend. It's important to make sure your browser supports websockets, otherwise the UI won't be able to connect to the node agent whatsoever.
-
 You can also change the agent port and binding address where it listen to by setting up the following parameters:
 
 * **port:** The port for the Devtools UI to connect to using websockets. Set to `9999` by default
