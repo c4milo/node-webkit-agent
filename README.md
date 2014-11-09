@@ -1,4 +1,5 @@
 # Node Webkit Agent
+[![Gitter](https://badges.gitter.im/Join Chat.svg)](https://gitter.im/c4milo/node-webkit-agent?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 [![Stories in Ready](https://badge.waffle.io/c4milo/node-webkit-agent.png?label=ready)](https://waffle.io/c4milo/node-webkit-agent)
 <a href="http://flattr.com/thing/799265/c4milonode-webkit-agent-on-GitHub" target="_blank">
 <img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0" /></a>
