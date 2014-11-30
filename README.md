@@ -24,7 +24,8 @@ that comes with any webkit-based browsers such as Chrome or Safari.
 From within your Node application, just require the module as usual, and start the agent. For example:
 
 ```javascript
-var agent = require('webkit-devtools-agent');
+var Agent = require('webkit-devtools-agent'),
+    agent = new Agent();
 agent.start()
 ```
 
