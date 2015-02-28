@@ -37,14 +37,14 @@ Once the agent is initiated, use any of the following hosted Devtools UIs to pro
 You can also change the agent port and binding address where it listen to by setting up the following parameters:
 
 * **port:** The port for the Devtools UI to connect to using websockets. Set to `9999` by default
-* **bind_to:** The host or IP address where the websockets service is going to be bound to. Set to `0.0.0.0` by default
+* **bind_to:** The host or IP address where the websockets service is going to be bound to. Set to `127.0.0.1` by default
 * **ipc_port:** IPC port for internal use. Set to `3333` by default
 * **verbose:** Whether to log more information or not. Set to `false` by default
 
 See the example below to understand better how to set these parameters.
 
 ### Example
-A more elaborated example looks like: 
+A more elaborated example looks like:
 
 ```javascript
 
