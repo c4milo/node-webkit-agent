@@ -12,12 +12,17 @@ void Profile::Initialize() {
   NanAssignPersistent(profile_template_, profile_template);
   profile_template->SetInternalFieldCount(1);
   profile_template->SetAccessor(NanNew<String>("title"), Profile::GetTitle);
+#if (NODE_MODULE_VERSION < 12)
   profile_template->SetAccessor(NanNew<String>("uid"), Profile::GetUid);
+#endif // (NODE_MODULE_VERSION < 12)
   profile_template->SetAccessor(NanNew<String>("topRoot"), Profile::GetTopRoot);
+#if (NODE_MODULE_VERSION < 12)
   profile_template->SetAccessor(NanNew<String>("bottomRoot"), Profile::GetBottomRoot);
+#endif // (NODE_MODULE_VERSION < 12)
   profile_template->Set(NanNew<String>("delete"), NanNew<FunctionTemplate>(Profile::Delete));
 }
 
+#if (NODE_MODULE_VERSION < 12)
 NAN_PROPERTY_GETTER(Profile::GetUid) {
   NanScope();
   Local<Object> self = args.Holder();
@@ -25,6 +30,7 @@ NAN_PROPERTY_GETTER(Profile::GetUid) {
   uint32_t uid = static_cast<CpuProfile*>(ptr)->GetUid();
   NanReturnValue(NanNew<Integer>(uid));
 }
+#endif // (NODE_MODULE_VERSION < 12)
 
 
 NAN_PROPERTY_GETTER(Profile::GetTitle) {
@@ -44,6 +50,7 @@ NAN_PROPERTY_GETTER(Profile::GetTopRoot) {
 }
 
 
+#if (NODE_MODULE_VERSION < 12)
 NAN_PROPERTY_GETTER(Profile::GetBottomRoot) {
   NanScope();
   Local<Object> self = args.Holder();
@@ -51,6 +58,7 @@ NAN_PROPERTY_GETTER(Profile::GetBottomRoot) {
   const CpuProfileNode* node = static_cast<CpuProfile*>(ptr)->GetBottomUpRoot();
   NanReturnValue(ProfileNode::New(node));
 }
+#endif // (NODE_MODULE_VERSION < 12)
 
 NAN_METHOD(Profile::Delete) {
   NanScope();

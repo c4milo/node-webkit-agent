@@ -15,7 +15,9 @@ void Snapshot::Initialize() {
   snapshot_template->SetInternalFieldCount(1);
   snapshot_template->SetAccessor(NanNew<String>("title"), Snapshot::GetTitle);
   snapshot_template->SetAccessor(NanNew<String>("uid"), Snapshot::GetUid);
+#if (NODE_MODULE_VERSION < 12)
   snapshot_template->SetAccessor(NanNew<String>("type"), Snapshot::GetType);
+#endif // (NODE_MODULE_VERSION < 12)
   snapshot_template->Set(NanNew<String>("delete"), NanNew<FunctionTemplate>(Snapshot::Delete));
   snapshot_template->Set(NanNew<String>("serialize"), NanNew<FunctionTemplate>(Snapshot::Serialize));
 }
@@ -36,6 +38,7 @@ NAN_PROPERTY_GETTER(Snapshot::GetUid) {
   NanReturnValue(NanNew<Integer>(uid));
 }
 
+#if (NODE_MODULE_VERSION < 12)
 NAN_PROPERTY_GETTER(Snapshot::GetType) {
   NanScope();
   Local<Object> self = args.Holder();
@@ -54,6 +57,7 @@ NAN_PROPERTY_GETTER(Snapshot::GetType) {
 
   NanReturnValue(t);
 }
+#endif // (NODE_MODULE_VERSION < 12)
 
 NAN_METHOD(Snapshot::Delete) {
     NanScope();

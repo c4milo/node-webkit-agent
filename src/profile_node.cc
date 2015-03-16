@@ -13,11 +13,13 @@ void ProfileNode::Initialize() {
   node_template->SetAccessor(NanNew<String>("functionName"), ProfileNode::GetFunctionName);
   node_template->SetAccessor(NanNew<String>("scriptName"), ProfileNode::GetScriptName);
   node_template->SetAccessor(NanNew<String>("lineNumber"), ProfileNode::GetLineNumber);
+#if (NODE_MODULE_VERSION < 12)
   node_template->SetAccessor(NanNew<String>("totalTime"), ProfileNode::GetTotalTime);
   node_template->SetAccessor(NanNew<String>("selfTime"), ProfileNode::GetSelfTime);
   node_template->SetAccessor(NanNew<String>("totalSamplesCount"), ProfileNode::GetTotalSamplesCount);
   node_template->SetAccessor(NanNew<String>("selfSamplesCount"), ProfileNode::GetSelfSamplesCount);
   node_template->SetAccessor(NanNew<String>("callUid"), ProfileNode::GetCallUid);
+#endif // (NODE_MODULE_VERSION < 12)
   node_template->SetAccessor(NanNew<String>("childrenCount"), ProfileNode::GetChildrenCount);
   node_template->Set(NanNew<String>("getChild"), NanNew<FunctionTemplate>(ProfileNode::GetChild));
 }
@@ -46,6 +48,7 @@ NAN_PROPERTY_GETTER(ProfileNode::GetLineNumber) {
   NanReturnValue(NanNew<Integer>(ln));
 }
 
+#if (NODE_MODULE_VERSION < 12)
 NAN_PROPERTY_GETTER(ProfileNode::GetTotalTime) {
   NanScope();
   Local<Object> self = args.Holder();
@@ -85,6 +88,7 @@ NAN_PROPERTY_GETTER(ProfileNode::GetCallUid) {
   uint32_t uid = static_cast<CpuProfileNode*>(ptr)->GetCallUid();
   NanReturnValue(NanNew<Integer>(uid));
 }
+#endif // (NODE_MODULE_VERSION < 12)
 
 NAN_PROPERTY_GETTER(ProfileNode::GetChildrenCount) {
   NanScope();

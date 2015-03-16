@@ -13,12 +13,16 @@ namespace nodex {
 
         Local<Object> cpuProfilerObj = cpu_profiler_template->NewInstance();
 
+#if (NODE_MODULE_VERSION < 12)
         NODE_SET_METHOD(cpuProfilerObj, "getProfilesCount", CpuProfiler::GetProfilesCount);
         NODE_SET_METHOD(cpuProfilerObj, "getProfile", CpuProfiler::GetProfile);
         NODE_SET_METHOD(cpuProfilerObj, "findProfile", CpuProfiler::FindProfile);
+#endif // (NODE_MODULE_VERSION < 12)
         NODE_SET_METHOD(cpuProfilerObj, "startProfiling", CpuProfiler::StartProfiling);
         NODE_SET_METHOD(cpuProfilerObj, "stopProfiling", CpuProfiler::StopProfiling);
+#if (NODE_MODULE_VERSION < 12)
         NODE_SET_METHOD(cpuProfilerObj, "deleteAllProfiles", CpuProfiler::DeleteAllProfiles);
+#endif // (NODE_MODULE_VERSION < 12)
 
         target->Set(NanNew<String>("cpuProfiler"), cpuProfilerObj);
     }
@@ -26,6 +30,7 @@ namespace nodex {
     CpuProfiler::CpuProfiler() {}
     CpuProfiler::~CpuProfiler() {}
 
+#if (NODE_MODULE_VERSION < 12)
     NAN_METHOD(CpuProfiler::GetProfilesCount) {
         NanScope();
         NanReturnValue(NanNew<Integer>(v8::CpuProfiler::GetProfilesCount()));
@@ -54,24 +59,35 @@ namespace nodex {
         const CpuProfile* profile = v8::CpuProfiler::FindProfile(uid);
         NanReturnValue(Profile::New(profile));
     }
+#endif // (NODE_MODULE_VERSION < 12)
 
     NAN_METHOD(CpuProfiler::StartProfiling) {
         NanScope();
         Local<String> title = args.Length() > 0 ? args[0]->ToString() : NanNew<String>("");
+#if (NODE_MODULE_VERSION < 12)
         v8::CpuProfiler::StartProfiling(title);
+#else // (NODE_MODULE_VERSION < 12)
+        v8::Isolate::GetCurrent()->GetCpuProfiler()->StartProfiling(title);
+#endif // (NODE_MODULE_VERSION < 12)
         NanReturnUndefined();
     }
 
     NAN_METHOD(CpuProfiler::StopProfiling) {
         NanScope();
         Local<String> title = args.Length() > 0 ? args[0]->ToString() : NanNew<String>("");
+#if (NODE_MODULE_VERSION < 12)
         const CpuProfile* profile = v8::CpuProfiler::StopProfiling(title);
+#else // (NODE_MODULE_VERSION < 12)
+        const CpuProfile* profile = v8::Isolate::GetCurrent()->GetCpuProfiler()->StopProfiling(title);
+#endif // (NODE_MODULE_VERSION < 12)
         NanReturnValue(Profile::New(profile));
     }
 
+#if (NODE_MODULE_VERSION < 12)
     NAN_METHOD(CpuProfiler::DeleteAllProfiles) {
         v8::CpuProfiler::DeleteAllProfiles();
         NanReturnUndefined();
     }
+#endif // (NODE_MODULE_VERSION < 12)
 
 } //namespace nodex

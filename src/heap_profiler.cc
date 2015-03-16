@@ -52,7 +52,9 @@ namespace nodex {
 
         NODE_SET_METHOD(heapProfilerObj, "takeSnapshot", HeapProfiler::TakeSnapshot);
         NODE_SET_METHOD(heapProfilerObj, "getSnapshot", HeapProfiler::GetSnapshot);
+#if (NODE_MODULE_VERSION < 12)
         NODE_SET_METHOD(heapProfilerObj, "findSnapshot", HeapProfiler::FindSnapshot);
+#endif // (NODE_MODULE_VERSION < 12)
         NODE_SET_METHOD(heapProfilerObj, "getSnapshotsCount", HeapProfiler::GetSnapshotsCount);
         NODE_SET_METHOD(heapProfilerObj, "deleteAllSnapshots", HeapProfiler::DeleteAllSnapshots);
 
@@ -64,7 +66,11 @@ namespace nodex {
 
     NAN_METHOD(HeapProfiler::GetSnapshotsCount) {
         NanScope();
+#if (NODE_MODULE_VERSION < 12)
         NanReturnValue(NanNew<Integer>(v8::HeapProfiler::GetSnapshotsCount()));
+#else // (NODE_MODULE_VERSION < 12)
+        NanReturnValue(NanNew<Integer>(v8::Isolate::GetCurrent()->GetHeapProfiler()->GetSnapshotCount()));
+#endif // (NODE_MODULE_VERSION < 12)
     }
 
     NAN_METHOD(HeapProfiler::GetSnapshot) {
@@ -75,11 +81,16 @@ namespace nodex {
             NanThrowTypeError("Argument must be an integer");
         }
         int32_t index = args[0]->Int32Value();
+#if (NODE_MODULE_VERSION < 12)
         const v8::HeapSnapshot* snapshot = v8::HeapProfiler::GetSnapshot(index);
+#else // (NODE_MODULE_VERSION < 12)
+        const v8::HeapSnapshot* snapshot = v8::Isolate::GetCurrent()->GetHeapProfiler()->GetHeapSnapshot(index);
+#endif // (NODE_MODULE_VERSION < 12)
 
         NanReturnValue(Snapshot::New(snapshot));
     }
 
+#if (NODE_MODULE_VERSION < 12)
     NAN_METHOD(HeapProfiler::FindSnapshot) {
         NanScope();
         if (args.Length() < 1) {
@@ -91,6 +102,7 @@ namespace nodex {
 
         NanReturnValue(Snapshot::New(snapshot));
     }
+#endif // (NODE_MODULE_VERSION < 12)
 
     NAN_METHOD(HeapProfiler::TakeSnapshot) {
         NanScope();
@@ -117,14 +129,22 @@ namespace nodex {
             }
         }
 
+#if (NODE_MODULE_VERSION < 12)
         const v8::HeapSnapshot* snapshot = v8::HeapProfiler::TakeSnapshot(title, HeapSnapshot::kFull, control);
+#else // (NODE_MODULE_VERSION < 12)
+        const v8::HeapSnapshot* snapshot = v8::Isolate::GetCurrent()->GetHeapProfiler()->TakeHeapSnapshot(title, control);
+#endif // (NODE_MODULE_VERSION < 12)
 
         NanReturnValue(Snapshot::New(snapshot));
     }
 
     NAN_METHOD(HeapProfiler::DeleteAllSnapshots) {
         NanScope();
+#if (NODE_MODULE_VERSION < 12)
         v8::HeapProfiler::DeleteAllSnapshots();
+#else // (NODE_MODULE_VERSION < 12)
+        v8::Isolate::GetCurrent()->GetHeapProfiler()->DeleteAllHeapSnapshots();
+#endif // (NODE_MODULE_VERSION < 12)
         NanReturnUndefined();
     }
 } //namespace nodex
