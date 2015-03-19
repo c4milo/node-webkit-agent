@@ -6,12 +6,12 @@
 
 
 This module is an implementation of
-[Chrome developer tools protocol](http://code.google.com/chrome/devtools/docs/protocol/1.0/index.html).
+[Chrome developer tools protocol](https://developer.chrome.com/devtools/docs/protocol/1.0/index).
 It is still pretty much a work in progress and only heap and CPU profilers are working right now. Help is wanted to finish implementing debugger, networking and console agents as well as a implementing from scratch a flamegraphs agent.
 
 ## Features
 This module allows you to debug and profile remotely your nodejs applications
-leveraging the following features by re-using the [built-in devtools front-end](http://code.google.com/chrome/devtools/docs/overview.html)
+leveraging the following features by re-using the [built-in devtools front-end](https://developer.chrome.com/devtools)
 that comes with any webkit-based browsers such as Chrome or Safari.
 
 * Remote heap and CPU profiling
