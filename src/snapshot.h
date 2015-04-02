@@ -5,6 +5,7 @@
 
 #include <node.h>
 #include <v8-profiler.h>
+#include <nan.h>
 
 using namespace v8;
 
@@ -20,18 +21,11 @@ class Snapshot {
 
     const v8::HeapSnapshot* m_snapshot;
 
-    static Handle<Value> GetUid(Local<String> property, const AccessorInfo& info);
-    static Handle<Value> GetTitle(Local<String> property, const AccessorInfo& info);
-    static Handle<Value> GetMaxSnapshotJSObjectId(Local<String> property, const AccessorInfo& info);
-    static Handle<Value> GetRoot(Local<String> property, const AccessorInfo& info);
-    static Handle<Value> GetType(Local<String> property, const AccessorInfo& info);
-    static Handle<Value> GetNodesCount(Local<String> property, const AccessorInfo& info);
-    static Handle<Value> GetNodeById(const Arguments& args);
-    static Handle<Value> GetNode(const Arguments& args);
-    static Handle<Value> Delete(const Arguments& args);
-    static Handle<Value> Serialize(const Arguments& args);
-
-    static Handle<Value> SnapshotObjectId(const Arguments& args);
+    static NAN_PROPERTY_GETTER(GetUid);
+    static NAN_PROPERTY_GETTER(GetTitle);
+    static NAN_PROPERTY_GETTER(GetType);
+    static NAN_METHOD(Delete);
+    static NAN_METHOD(Serialize);
 
     static void Initialize();
     static Persistent<ObjectTemplate> snapshot_template_;
