@@ -67,7 +67,7 @@ namespace nodex {
 #if (NODE_MODULE_VERSION < 12)
         v8::CpuProfiler::StartProfiling(title);
 #else // (NODE_MODULE_VERSION < 12)
-        v8::Isolate::GetCurrent()->GetCpuProfiler()->StartProfiling(title);
+        v8::Isolate::GetCurrent()->GetCpuProfiler()->StartProfiling(title, true);
 #endif // (NODE_MODULE_VERSION < 12)
         NanReturnUndefined();
     }

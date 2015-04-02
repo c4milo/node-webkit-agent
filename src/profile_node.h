@@ -19,11 +19,15 @@ class ProfileNode {
    static NAN_PROPERTY_GETTER(GetFunctionName);
    static NAN_PROPERTY_GETTER(GetScriptName);
    static NAN_PROPERTY_GETTER(GetLineNumber);
+#if (NODE_MODULE_VERSION < 12)
    static NAN_PROPERTY_GETTER(GetTotalTime);
    static NAN_PROPERTY_GETTER(GetSelfTime);
    static NAN_PROPERTY_GETTER(GetTotalSamplesCount);
    static NAN_PROPERTY_GETTER(GetSelfSamplesCount);
    static NAN_PROPERTY_GETTER(GetCallUid);
+#else
+   static NAN_PROPERTY_GETTER(GetHitCount);
+#endif
    static NAN_PROPERTY_GETTER(GetChildrenCount);
    static NAN_METHOD(GetChild);
 
