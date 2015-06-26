@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 //var Debugger = require('./lib/debugger');
+var http = require('http');
+var NodeStatic = require('node-static');
 var WebSocket = require('ws');
 var WebSocketServer = WebSocket.Server;
 
@@ -87,11 +89,32 @@ var DevToolsAgentProxy = module.exports = function () {
      * @api private
      */
     this.onBackendOpen = function () {
-        //Starts websockets server for DevTools frontend
-        this.wss = new WebSocketServer({
-            port: this.port,
-            host: this.bind_to
+        var fileServer = new NodeStatic.Server(__dirname + '/client');
+
+        var server = http.createServer(function(req, res) {
+            // Serve static devtools client files.
+            req.addListener('end', function() {
+                fileServer.serve(req, res, function(err, result) {
+                    if (err) {
+                        console.error('Error serving %s - %s', req.url, err.message);
+                        if (err.status === 404 || err.status === 500) {
+                            res.writeHead(err.status, err.headers);
+                            res.write(err.message);
+                            res.end();
+                        }
+                    } else {
+                        if (this.verbose) {
+                            console.log('%s - %s', req.url, res.message);
+                        }
+                    }
+                });
+            }).resume();
         });
+
+        server.listen(this.port, this.bind_to);
+
+        // Starts websockets server for DevTools frontend
+        this.wss = new WebSocketServer({server: server});
 
         if (this.verbose) {
             console.log('webkit-devtools-agent: Websockets ' +
